@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: d82a6f5a7ad124577a94488fce172a2a
+guid: 699a49200eee25e4e87ecc1a21fc8c92
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
@@ -33,11 +33,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: idle
+      name: right diagonal walking
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
-      lastFrame: 300
+      lastFrame: 31
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -47,11 +47,11 @@ ModelImporter:
       loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
+      keepOriginalOrientation: 1
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
+      keepOriginalPositionXZ: 1
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -526,23 +526,23 @@ ModelImporter:
         length: 0
         modified: 0
     skeleton:
-    - name: model_Y(Clone)
+    - name: prototype(Clone)
       parentName: 
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Alpha_Surface
-      parentName: model_Y(Clone)
+      parentName: prototype(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Alpha_Joints
-      parentName: model_Y(Clone)
+      parentName: prototype(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: mixamorig:Hips
-      parentName: model_Y(Clone)
+      parentName: prototype(Clone)
       position: {x: 0.00000033015945, y: 0.99791867, z: 0.00000051621345}
       rotation: {x: 7.537291e-11, y: 0.0000017531268, z: -0.000043883512, w: 1}
       scale: {x: 1, y: 1, z: 1}
@@ -830,7 +830,7 @@ ModelImporter:
     - name: mixamorig:RightHandPinky4
       parentName: mixamorig:RightHandPinky3
       position: {x: -4.3620255e-14, y: 0.029238662, z: 9.807259e-16}
-      rotation: {x: -0.00008226664, y: 0.00849884, z: -0.002206107, w: 0.99996144}
+      rotation: {x: -0.00008226664, y: 0.008498841, z: -0.002206107, w: 0.9999615}
       scale: {x: 1, y: 1, z: 1}
     - name: mixamorig:LeftUpLeg
       parentName: mixamorig:Hips
@@ -845,7 +845,7 @@ ModelImporter:
     - name: mixamorig:LeftFoot
       parentName: mixamorig:LeftLeg
       position: {x: 8.8817837e-17, y: 0.42099026, z: 2.0872193e-16}
-      rotation: {x: 0.54055774, y: -0.01436606, z: -0.024950866, w: 0.8408141}
+      rotation: {x: 0.54055774, y: -0.0143660605, z: -0.024950866, w: 0.8408142}
       scale: {x: 1, y: 1, z: 1}
     - name: mixamorig:LeftToeBase
       parentName: mixamorig:LeftFoot
@@ -875,7 +875,7 @@ ModelImporter:
     - name: mixamorig:RightToeBase
       parentName: mixamorig:RightFoot
       position: {x: -2.3694832e-17, y: 0.15721558, z: 3.4555692e-17}
-      rotation: {x: 0.22770867, y: -0.032119602, z: -0.015257906, w: 0.9730798}
+      rotation: {x: 0.22770867, y: -0.032119606, z: -0.015257906, w: 0.97307986}
       scale: {x: 1, y: 1, z: 1}
     - name: mixamorig:RightToe_End
       parentName: mixamorig:RightToeBase
@@ -894,7 +894,7 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 2f80638e0f46141488c49e0dfd950c95,
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 62d870f68c2af0144a71be21eba3e278,
     type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
