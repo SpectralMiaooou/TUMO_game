@@ -5,11 +5,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("References")]
-    public Transform orientation;
-    public Transform player;
-    public Transform playerObj;
-
     public float rotationSpeed;
     Animator anim;
     Rigidbody rb;
@@ -18,10 +13,12 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 10f;
 
     Vector2 move;
-    Vector2 rotation;
     Vector3 moveDirection;
 
     PlayerControls controls;
+
+    private bool isJumping;
+    private bool isGrounded;
    
 
     private void Awake(){
@@ -29,9 +26,7 @@ public class PlayerController : MonoBehaviour
 
         controls.Gameplay.Movement.performed += ctx => move = ctx.ReadValue<Vector2>();
         controls.Gameplay.Movement.canceled += ctx => move = Vector2.zero;
-
-        controls.Gameplay.Rotation.performed += ctx => rotation = ctx.ReadValue<Vector2>();
-        controls.Gameplay.Rotation.canceled += ctx => rotation = Vector2.zero;
+        controls.Gameplay.Jump.performed += Jump;
     }
 
     private void OnEnable()
@@ -59,9 +54,9 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         print(move);
-        print(rotation);
         Movement();
-        //rotationCam();
+        FallingCheck();
+        print(rb.velocity.y);
     }
 
     void Movement()
@@ -73,14 +68,41 @@ public class PlayerController : MonoBehaviour
         anim.SetFloat("inputY", move.y);
     }
 
-    void rotationCam(){
-        Vector3 viewDir = player.position - new Vector3(transform.position.x, player.position.y, transform.position.z);
-        orientation.forward = viewDir.normalized;
+    void Jump(InputAction.CallbackContext context){
+        Debug.Log(context);
+        if(context.performed){
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            anim.SetBool("isJumping", true);
+        }
+    }
 
-        Vector3 inputDir = orientation.forward * rotation.x + orientation.right * rotation.y;
-        
-        if (inputDir != Vector3.zero){
-            playerObj.forward = Vector3.Slerp(playerObj.forward, inputDir.normalized, Time.deltaTime * rotationSpeed);
+    void FallingCheck(){
+        if(rb.velocity.y < -0.1){
+            anim.SetBool("isFalling", true);
+        }
+        else{
+            anim.SetBool("isFalling", true);
+        }
+    }
+
+    void OnCollisionEnter(Collision col){
+        if(col.transform.tag == "Ground"){
+            anim.SetBool("isGrounded", true);
+            anim.SetBool("isFalling", false);
+            anim.SetBool("isJumping", false);
+         }
+     }
+    void OnCollisionExit(Collision col){
+        if(col.transform.tag == "Ground"){
+            anim.SetBool("isGrounded", false);
+            if(isJumping){
+                anim.SetBool("isJumping", true);
+                anim.SetBool("isFalling", false);
+            }
+            else{
+                anim.SetBool("isFalling", true);
+                anim.SetBool("isJumping", false);
+            }
         }
     }
 }
