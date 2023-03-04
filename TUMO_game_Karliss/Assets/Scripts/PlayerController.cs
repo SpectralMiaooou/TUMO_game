@@ -53,10 +53,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        print(move);
         Movement();
+        GroundCheck();
         FallingCheck();
-        print(rb.velocity.y);
     }
 
     void Movement()
@@ -72,37 +71,35 @@ public class PlayerController : MonoBehaviour
         Debug.Log(context);
         if(context.performed){
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+
+            isJumping = true;
             anim.SetBool("isJumping", true);
         }
     }
 
     void FallingCheck(){
-        if(rb.velocity.y < -0.1){
+        if(rb.velocity.y < -0.1 && !isGrounded){
             anim.SetBool("isFalling", true);
+            anim.SetBool("isJumping", false);
         }
         else{
-            anim.SetBool("isFalling", true);
+            anim.SetBool("isFalling", false);
         }
     }
 
-    void OnCollisionEnter(Collision col){
-        if(col.transform.tag == "Ground"){
+    void GroundCheck(){
+        float groundCheckDistance = (GetComponent<CapsuleCollider>().height / 2) + 0.1f;
+        
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, -transform.up, out hit, groundCheckDistance)){
+            isGrounded = true;
+
             anim.SetBool("isGrounded", true);
-            anim.SetBool("isFalling", false);
-            anim.SetBool("isJumping", false);
-         }
-     }
-    void OnCollisionExit(Collision col){
-        if(col.transform.tag == "Ground"){
+        }
+        else{
+            isGrounded = false;
+
             anim.SetBool("isGrounded", false);
-            if(isJumping){
-                anim.SetBool("isJumping", true);
-                anim.SetBool("isFalling", false);
-            }
-            else{
-                anim.SetBool("isFalling", true);
-                anim.SetBool("isJumping", false);
-            }
         }
     }
 }
