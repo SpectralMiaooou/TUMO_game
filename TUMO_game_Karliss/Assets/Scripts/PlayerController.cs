@@ -5,7 +5,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public float rotationSpeed;
     Animator anim;
     Rigidbody rb;
 
@@ -19,7 +18,11 @@ public class PlayerController : MonoBehaviour
 
     private bool isJumping;
     private bool isGrounded;
-   
+
+    public Transform groundCheck;
+    public LayerMask groundMask;
+
+
 
     private void Awake(){
         controls = new PlayerControls();
@@ -73,14 +76,13 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
 
             isJumping = true;
-            anim.SetBool("isJumping", true);
+            anim.SetTrigger("isJumping");
         }
     }
 
     void FallingCheck(){
         if(rb.velocity.y < -0.1 && !isGrounded){
             anim.SetBool("isFalling", true);
-            anim.SetBool("isJumping", false);
         }
         else{
             anim.SetBool("isFalling", false);
@@ -88,18 +90,8 @@ public class PlayerController : MonoBehaviour
     }
 
     void GroundCheck(){
-        float groundCheckDistance = (GetComponent<CapsuleCollider>().height / 2) + 0.1f;
-        
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, -transform.up, out hit, groundCheckDistance)){
-            isGrounded = true;
+        isGrounded = Physics.CheckSphere(groundCheck.position, 0.4f, groundMask);
 
-            anim.SetBool("isGrounded", true);
-        }
-        else{
-            isGrounded = false;
-
-            anim.SetBool("isGrounded", false);
-        }
+        anim.SetBool("isGrounded", isGrounded);
     }
 }
