@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
 
     private bool isJumping;
     private bool isGrounded;
+    private bool isAttacking;
 
     public Transform groundCheck;
     public LayerMask groundMask;
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour
         controls.Gameplay.Movement.performed += ctx => move = ctx.ReadValue<Vector2>();
         controls.Gameplay.Movement.canceled += ctx => move = Vector2.zero;
         controls.Gameplay.Jump.performed += Jump;
+        controls.Gameplay.Attack.performed += Attack;
     }
 
     private void OnEnable()
@@ -63,20 +65,28 @@ public class PlayerController : MonoBehaviour
 
     void Movement()
     {
-        moveDirection = transform.forward * move.y + transform.right * move.x;
-        rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
+        if(!isAttacking){
+            moveDirection = transform.forward * move.y + transform.right * move.x;
+            rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
 
-        anim.SetFloat("inputX", move.x);
-        anim.SetFloat("inputY", move.y);
+            anim.SetFloat("inputX", move.x);
+            anim.SetFloat("inputY", move.y);
+        }
     }
 
     void Jump(InputAction.CallbackContext context){
-        Debug.Log(context);
-        if(context.performed){
+        if(context.performed && isGrounded){
+            isGrounded = false;
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
 
             isJumping = true;
             anim.SetTrigger("isJumping");
+        }
+    }
+    void Attack(InputAction.CallbackContext context){
+        if(context.performed && isGrounded){
+            //isAttacking = true;
+            anim.SetTrigger("isAttacking");
         }
     }
 
@@ -92,6 +102,11 @@ public class PlayerController : MonoBehaviour
     void GroundCheck(){
         isGrounded = Physics.CheckSphere(groundCheck.position, 0.4f, groundMask);
 
-        anim.SetBool("isGrounded", isGrounded);
+        if(isGrounded){
+            anim.SetBool("isGrounded", true);
+        }
+        else{
+            anim.SetBool("isGrounded", false);
+        }
     }
 }
