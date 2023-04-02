@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    Transform cam;
     Animator anim;
     Rigidbody rb;
 
@@ -48,6 +49,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        cam = Camera.main.transform;
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
 
@@ -66,11 +68,22 @@ public class PlayerController : MonoBehaviour
     void Movement()
     {
         if(!isAttacking){
-            moveDirection = transform.forward * move.y + transform.right * move.x;
-            rb.AddForce(moveDirection.normalized * speed * 10f, ForceMode.Force);
+            moveDirection = new Vector3(move.x, 0, move.y);
 
-            anim.SetFloat("inputX", move.x);
-            anim.SetFloat("inputY", move.y);
+            if (moveDirection == Vector3.zero)
+            {
+                return;
+            }
+
+            Quaternion targetRotation = Quaternion.LookRotation(moveDirection.normalized, Vector3.up);
+            Quaternion camOffset = Quaternion.Euler(0f, cam.rotation.y, 0f);
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation * camOffset, Time.deltaTime * 10f);
+
+            rb.AddForce(transform.forward * moveDirection.magnitude * speed * 10f, ForceMode.Force);
+
+            anim.SetFloat("inputX", moveDirection.magnitude);
+            //anim.SetFloat("inputY", move.y);
         }
     }
 
