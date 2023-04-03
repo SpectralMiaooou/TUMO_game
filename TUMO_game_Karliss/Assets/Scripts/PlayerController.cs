@@ -68,21 +68,23 @@ public class PlayerController : MonoBehaviour
     void Movement()
     {
         if(!isAttacking){
-            moveDirection = new Vector3(move.x, 0, move.y);
 
-            if (moveDirection == Vector3.zero)
+            moveDirection = new Vector3(move.x, 0, move.y);
+            anim.SetFloat("inputX", moveDirection.magnitude);
+
+            print(moveDirection.magnitude);
+            if (moveDirection.magnitude < 0.2)
             {
                 return;
             }
 
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection.normalized, Vector3.up);
-            Quaternion camOffset = Quaternion.Euler(0f, cam.rotation.y, 0f);
+            Quaternion camOffset = Quaternion.Euler(0f, cam.rotation.eulerAngles.y, 0f);
 
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation * camOffset, Time.deltaTime * 10f);
 
             rb.AddForce(transform.forward * moveDirection.magnitude * speed * 10f, ForceMode.Force);
 
-            anim.SetFloat("inputX", moveDirection.magnitude);
             //anim.SetFloat("inputY", move.y);
         }
     }
