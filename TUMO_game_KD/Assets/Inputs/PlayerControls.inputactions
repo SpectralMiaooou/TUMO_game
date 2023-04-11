@@ -33,15 +33,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Run",
-                    "type": "Button",
-                    "id": "519bcd71-a5e3-497e-8e99-230ebd688c1c",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Look",
                     "type": "PassThrough",
                     "id": "a732e5a6-e92e-4c76-a409-6d2279a70045",
@@ -121,22 +112,11 @@
                 {
                     "name": "",
                     "id": "45f002d5-b8c9-4ef9-a188-af40741ee778",
-                    "path": "<Keyboard>/f",
+                    "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7372f9d2-b550-48b8-8e9f-870fafcef33f",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "Hold",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Run",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

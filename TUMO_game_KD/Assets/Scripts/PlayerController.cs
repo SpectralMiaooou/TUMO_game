@@ -97,7 +97,7 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
 
             isJumping = true;
-            anim.SetTrigger("isJumping");
+            anim.SetBool("isJumping", true);
         }
     }
     void Attack(InputAction.CallbackContext context)
@@ -114,6 +114,8 @@ public class PlayerController : MonoBehaviour
         if (rb.velocity.y < -0.1 && !isGrounded)
         {
             anim.SetBool("isFalling", true);
+            isJumping = false;
+            anim.SetBool("isJumping", false);
         }
         else
         {
