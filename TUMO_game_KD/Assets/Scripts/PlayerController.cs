@@ -85,7 +85,9 @@ public class PlayerController : MonoBehaviour
 
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation * camOffset, Time.deltaTime * 10f);
 
-            rb.AddForce(transform.forward * moveDirection.magnitude * speed, ForceMode.Force);
+            //rb.AddForce(transform.forward * moveDirection.magnitude * speed, ForceMode.Force);
+            //rb.MovePosition(rb.position + moveDirection.normalized * speed * Time.fixedDeltaTime);
+
         }
     }
 
