@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     Transform cam;
     Animator anim;
-    Rigidbody rb;
+    CharacterController character;
 
     public float speed = 10f;
     public float jumpForce = 10f;
@@ -65,19 +65,17 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ApplyGravity();
+        //ApplyGravity();
         Movement();
-        GroundCheck();
-        FallingCheck();
-        UpdateImpact();
+        //GroundCheck();
+        //FallingCheck();
+        //UpdateImpact();
     }
 
     void Movement()
     {
         if (!isAttacking)
         {
-	   
-	   character.Move(transform.up * vY * Time.DeltaTime);
             moveDirection = new Vector3(move.x, 0, move.y);
             anim.SetFloat("inputX", moveDirection.magnitude);
 
@@ -92,35 +90,22 @@ public class PlayerController : MonoBehaviour
 
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation * camOffset, Time.deltaTime * 10f);
 		
-	    character.Move(transform.forward * moveDirection.magnitude * speed* Time.DeltaTime);
-            //rb.AddForce(transform.forward * moveDirection.magnitude * speed, ForceMode.Force);
-            //rb.MovePosition(rb.position + moveDirection.normalized * speed * Time.fixedDeltaTime);
+	        character.Move(transform.forward * moveDirection.magnitude * speed* Time.deltaTime);
 
         }
     }
     private void ApplyGravity()
     {
-	if(IsGrounded() && vY < 0.0f)
-	{
-		vY = -1f;
-	}
-	else
-	{
-		vY += _gravity * gravityMultiplier * Time.deltaTime;
-	}
+	    if(IsGrounded() && vY < 0.0f)
+	    {
+		    vY = -1f;
+	    }
+	    else
+	    {
+            vY += _gravity * Time.deltaTime;
+        }
+        character.Move(transform.up * vY * Time.deltaTime);
     }
-
-    void AddImpact(dir: Vector3, force: float){
-   	dir.Normalize();
-   	if (dir.y < 0) dir.y = -dir.y; // reflect down force on the ground
-   	impact += dir.normalized * force / 10;
-    }
-    void UpdateImpact()
-	{
-		if (impact.magnitude > 0.2) character.Move(impact * Time.deltaTime);
-   		// consumes the impact energy each cycle:
-   		impact = Vector3.Lerp(impact, Vector3.zero, 5*Time.deltaTime);	
-	}
 
 
     void Jump(InputAction.CallbackContext context)
@@ -160,11 +145,24 @@ public class PlayerController : MonoBehaviour
     void GroundCheck()
     {
         //isGrounded = Physics.CheckSphere(groundCheck.position, 0.4f, groundMask);
-	anim.SetBool("isGrounded", IsGrounded());
+	    anim.SetBool("isGrounded", IsGrounded());
     }
 
     private bool IsGrounded()
     {
-	return character.isGrounded;
+	    return character.isGrounded;
+    }
+
+    void AddImpact(Vector3 dir, float force)
+    {
+        dir.Normalize();
+        if (dir.y < 0) dir.y = -dir.y; // reflect down force on the ground
+        impact += dir.normalized * force / 10;
+    }
+    void UpdateImpact()
+    {
+        if (impact.magnitude > 0.2) character.Move(impact * Time.deltaTime);
+        // consumes the impact energy each cycle:
+        impact = Vector3.Lerp(impact, Vector3.zero, 5 * Time.deltaTime);
     }
 }
