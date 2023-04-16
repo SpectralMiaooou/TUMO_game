@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private float _gravity = -9.81f;
     [SerializeField] private float gravityMultiplier = 3.0f;
     private float vY;
+    public Vector3 desiredMoveDirection;
 
     Vector2 move;
     Vector3 moveDirection;
@@ -65,9 +66,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //ApplyGravity();
+        isGrounded = character.isGrounded;
+        anim.SetBool("isGrounded", isGrounded);
+
         Movement();
-        //GroundCheck();
+        ApplyGravity();
         //FallingCheck();
         //UpdateImpact();
     }
@@ -76,41 +79,47 @@ public class PlayerController : MonoBehaviour
     {
         if (!isAttacking)
         {
-            moveDirection = new Vector3(move.x, 0, move.y);
-            anim.SetFloat("inputX", moveDirection.magnitude);
-
+            anim.SetFloat("inputX", move.magnitude, 0.0f, Time.deltaTime * 2f);
             //print(moveDirection.magnitude);
-            if (moveDirection.magnitude < 0.4)
+            if (move.magnitude < 0.4)
             {
                 return;
             }
 
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection.normalized, Vector3.up);
-            Quaternion camOffset = Quaternion.Euler(0f, cam.rotation.eulerAngles.y, 0f);
+            var forward = cam.transform.forward;
+            var right = cam.transform.right;
 
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation * camOffset, Time.deltaTime * 10f);
+            forward.y = 0f;
+            right.y = 0f;
+
+            forward.Normalize();
+            right.Normalize();
+
+            desiredMoveDirection = forward * move.y + right * move.x;
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredMoveDirection), Time.deltaTime * 10f);
 		
-	        character.Move(transform.forward * moveDirection.magnitude * speed* Time.deltaTime);
+	        character.Move(transform.forward * move.magnitude * speed* Time.deltaTime);
 
         }
     }
     private void ApplyGravity()
     {
-	    if(IsGrounded() && vY < 0.0f)
+	    if(isGrounded && vY < 0.0f)
 	    {
-		    vY = -1f;
+		    vY = 0f;
 	    }
 	    else
 	    {
             vY += _gravity * Time.deltaTime;
         }
-        character.Move(transform.up * vY * Time.deltaTime);
+        character.Move(transform.up * vY);
     }
 
 
     void Jump(InputAction.CallbackContext context)
     {
-        if (context.performed && IsGrounded())
+        if (context.performed && isGrounded)
         {
             isGrounded = false;
             vY += jumpForce;
@@ -121,7 +130,7 @@ public class PlayerController : MonoBehaviour
     }
     void Attack(InputAction.CallbackContext context)
     {
-        if (context.performed && IsGrounded())
+        if (context.performed && isGrounded)
         {
             //isAttacking = true;
             anim.SetTrigger("isAttacking");
@@ -130,7 +139,7 @@ public class PlayerController : MonoBehaviour
 
     void FallingCheck()
     {
-        if (vY < -0.1 && !IsGrounded())
+        if (vY < -0.1 && !isGrounded)
         {
             anim.SetBool("isFalling", true);
             isJumping = false;
@@ -140,17 +149,6 @@ public class PlayerController : MonoBehaviour
         {
             anim.SetBool("isFalling", false);
         }
-    }
-
-    void GroundCheck()
-    {
-        //isGrounded = Physics.CheckSphere(groundCheck.position, 0.4f, groundMask);
-	    anim.SetBool("isGrounded", IsGrounded());
-    }
-
-    private bool IsGrounded()
-    {
-	    return character.isGrounded;
     }
 
     void AddImpact(Vector3 dir, float force)
