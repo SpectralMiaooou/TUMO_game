@@ -278,7 +278,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.01191304, y: -5.551115e-17, z: 8.6736174e-19, w: 0.9999291}
+  m_LocalRotation: {x: 0.011913041, y: 0.00000001163143, z: -1.3857553e-10, w: 0.9999291}
   m_LocalPosition: {x: 0, y: 4.62, z: -10.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -762,7 +762,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 702024654}
-  m_LocalRotation: {x: 0.011913039, y: 9.3125657e-10, z: -1.1094882e-11, w: 0.9999291}
+  m_LocalRotation: {x: 0.01191304, y: 0.000000011669018, z: -1.3902332e-10, w: 0.9999291}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1172,7 +1172,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 997992301}
-  m_LocalRotation: {x: 0.01191304, y: -7.8200715e-17, z: 1.1944476e-18, w: 0.9999291}
+  m_LocalRotation: {x: 0.011913041, y: 0.00000001163143, z: -1.3857553e-10, w: 0.9999291}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1250,7 +1250,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1066048532}
-  m_LocalRotation: {x: 0.0119130425, y: -9.3125696e-10, z: 1.1094896e-11, w: 0.9999291}
+  m_LocalRotation: {x: 0.011913039, y: 0.000000011631918, z: -1.385813e-10, w: 0.9999291}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1646,13 +1646,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  jumpForce: 10
-  gravityMultiplier: 3
   desiredMoveDirection: {x: 0, y: 0, z: 0}
   groundCheck: {fileID: 1243427043}
   groundMask:
     serializedVersion: 2
     m_Bits: 64
+  currentMovement: {x: 0, y: 0, z: 0}
 --- !u!143 &919132148106490648
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1664,7 +1663,7 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 1.75
+  m_Height: 1.65
   m_Radius: 0.25
   m_SlopeLimit: 45
   m_StepOffset: 0.3
