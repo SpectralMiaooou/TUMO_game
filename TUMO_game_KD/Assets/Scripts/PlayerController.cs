@@ -24,8 +24,13 @@ public class PlayerController : MonoBehaviour
     public Transform groundCheck;
     public LayerMask groundMask;
 
+
+    //Attack variables
+    private bool isAttackPressed = false;
+
     //Movement variables
     public Vector3 currentMovement;
+    private bool canMove = true;
 
     //Gravity variables
     private float gravity = -9.81f;
@@ -49,7 +54,9 @@ public class PlayerController : MonoBehaviour
         controls.Gameplay.Movement.canceled += ctx => move = Vector2.zero;
         controls.Gameplay.Jump.started += onJump;
         controls.Gameplay.Jump.canceled += onJump;
-        controls.Gameplay.Attack.performed += Attack;
+        controls.Gameplay.Attack.started += onAttack;
+        controls.Gameplay.Attack.canceled += onAttack;
+        //controls.Gameplay.Attack.performed += Attack;
 
         setupJumpVariables();
     }
@@ -86,8 +93,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        handleAttack();
         Movement();
+        handleAnimation();
         //UpdateImpact();
 
         character.Move(currentMovement * Time.deltaTime);
@@ -99,19 +107,22 @@ public class PlayerController : MonoBehaviour
         handleJump();
     }
 
+    void handleAnimation()
+    {
+        isAttacking = anim.GetBool("isAttacking");
+        isJumping = anim.GetBool("isJumping");
+    }
+
     void Movement()
     {
-        if (!isAttacking)
+        desiredMoveDirection = Vector3.zero;
+
+        if (canMove)
         {
             anim.SetFloat("inputX", move.magnitude, 0.0f, Time.deltaTime * 2f);
             currentMovement.x = 0f;
             currentMovement.z = 0f;
 
-            //print(moveDirection.magnitude);
-            if (move.magnitude < 0.3)
-            {
-                return;
-            }
 
             var forward = cam.transform.forward;
             var right = cam.transform.right;
@@ -124,14 +135,15 @@ public class PlayerController : MonoBehaviour
 
             desiredMoveDirection = forward * move.y + right * move.x;
 
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredMoveDirection), Time.deltaTime * 10f);
-
+            if (move.magnitude > 0.1)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredMoveDirection), Time.deltaTime * 10f);
+            }
+            
             desiredMoveDirection = transform.forward * move.magnitude * speed;
-
-            currentMovement.x = desiredMoveDirection.x;
-            currentMovement.z = desiredMoveDirection.z;
-
         }
+        currentMovement.x = desiredMoveDirection.x;
+        currentMovement.z = desiredMoveDirection.z;
     }
     private void handleGravity()
     {
@@ -142,10 +154,12 @@ public class PlayerController : MonoBehaviour
 
         if (IsGrounded())
         {
+            anim.SetBool("isFalling", false);
             currentMovement.y = groundedGravity;
 	    }
         else if(isFalling)
         {
+            anim.SetBool("isFalling", true);
             float previousYVelocity = currentMovement.y;
             float newYVelocity = currentMovement.y + (gravity * fallMultiplier * Time.deltaTime);
             float nextYVelocity = Mathf.Max((previousYVelocity + newYVelocity) * 0.5f,-20.0f) ;
@@ -153,6 +167,7 @@ public class PlayerController : MonoBehaviour
         }
 	    else
         {
+            anim.SetBool("isFalling", false);
             float previousYVelocity = currentMovement.y;
             float newYVelocity = currentMovement.y + (gravity * Time.deltaTime);
             float nextYVelocity = (previousYVelocity + newYVelocity) * 0.5f;
@@ -165,23 +180,20 @@ public class PlayerController : MonoBehaviour
     {
         if (isJumpPressed && IsGrounded() && !isJumping)
         {
-            isJumping = true;
             anim.SetBool("isJumping", true);
 
             currentMovement.y = initialJumpVelocity * 0.5f;
         }
         else if (!isJumpPressed && isJumping && IsGrounded())
         {
-            isJumping = false;
             anim.SetBool("isJumping", false);
         }
     }
-    void Attack(InputAction.CallbackContext context)
+    void handleAttack()
     {
-        if (context.performed && IsGrounded())
+        if (isAttackPressed && IsGrounded() && !isAttacking)
         {
-            //isAttacking = true;
-            anim.SetTrigger("isAttacking");
+            anim.SetBool("isAttacking", true);
         }
     }
 
@@ -208,8 +220,23 @@ public class PlayerController : MonoBehaviour
 
 
 
+    void enableMovement()
+    {
+        canMove = true;
+    }
+
+
+
+
+
+
     void onJump(InputAction.CallbackContext context)
     {
         isJumpPressed = context.ReadValueAsButton();
+    }
+
+    void onAttack(InputAction.CallbackContext context)
+    {
+        isAttackPressed = context.ReadValueAsButton();
     }
 }
