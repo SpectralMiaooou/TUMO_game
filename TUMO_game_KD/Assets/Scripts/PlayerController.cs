@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour
 
         character.Move(currentMovement * Time.deltaTime);
 
-        isGrounded = IsGrounded();
+        isGrounded = character.isGrounded;
         anim.SetBool("isGrounded", IsGrounded());
 
         handleGravity();
@@ -152,7 +152,7 @@ public class PlayerController : MonoBehaviour
 
         //anim.SetBool( "isFalling", isFalling);
 
-        if (IsGrounded())
+        if (character.isGrounded)
         {
             anim.SetBool("isFalling", false);
             currentMovement.y = groundedGravity;
@@ -178,20 +178,20 @@ public class PlayerController : MonoBehaviour
 
     void handleJump()
     {
-        if (isJumpPressed && IsGrounded() && !isJumping)
+        if (isJumpPressed && character.isGrounded && !isJumping)
         {
             anim.SetBool("isJumping", true);
 
             currentMovement.y = initialJumpVelocity * 0.5f;
         }
-        else if (!isJumpPressed && isJumping && IsGrounded())
+        else if (!isJumpPressed && isJumping && character.isGrounded)
         {
             anim.SetBool("isJumping", false);
         }
     }
     void handleAttack()
     {
-        if (isAttackPressed && IsGrounded() && !isAttacking)
+        if (isAttackPressed && character.isGrounded && !isAttacking)
         {
             anim.SetBool("isAttacking", true);
         }
