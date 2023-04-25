@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
 
     //Gravity variables
     private float gravity = -9.81f;
-    private float groundedGravity = -0.05f;
+    private float groundedGravity = -0.5f;
 
 
     //Jumping variables
@@ -93,16 +93,15 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        print(currentMovement.y);
         handleAttack();
         Movement();
         handleAnimation();
-        //UpdateImpact();
+        //handleImpact();
 
         character.Move(currentMovement * Time.deltaTime);
 
         isGrounded = character.isGrounded;
-        anim.SetBool("isGrounded", IsGrounded());
+        anim.SetBool("isGrounded", isGrounded);
 
         handleGravity();
         handleJump();
@@ -194,6 +193,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isAttackPressed && character.isGrounded && !isAttacking)
         {
+            canMove = false;
             anim.SetBool("isAttacking", true);
         }
     }
@@ -204,25 +204,19 @@ public class PlayerController : MonoBehaviour
         if (dir.y < 0) dir.y = -dir.y; // reflect down force on the ground
         impact += dir.normalized * force / 10;
     }
-    void UpdateImpact()
+    void handleImpact()
     {
         if (impact.magnitude > 0.2) character.Move(impact * Time.deltaTime);
         // consumes the impact energy each cycle:
         impact = Vector3.Lerp(impact, Vector3.zero, 5 * Time.deltaTime);
     }
 
-    bool IsGrounded()
+
+
+
+    void disableAttack()
     {
-        return Physics.CheckSphere(groundCheck.position, 0.05f, groundMask);
-    }
-
-
-
-
-
-
-    void enableMovement()
-    {
+        anim.SetBool("isAttacking", false);
         canMove = true;
     }
 
