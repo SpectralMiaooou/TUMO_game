@@ -24,6 +24,9 @@ public class PlayerController : MonoBehaviour
     public Transform groundCheck;
     public LayerMask groundMask;
 
+    //Impact variables
+    private Vector3 impactDirection = Vector3.zero;
+
 
     //Attack variables
     private bool isAttackPressed = false;
@@ -34,7 +37,7 @@ public class PlayerController : MonoBehaviour
 
     //Gravity variables
     private float gravity = -9.81f;
-    private float groundedGravity = -0.5f;
+    private float groundedGravity = -0.05f;
 
 
     //Jumping variables
@@ -93,15 +96,14 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        anim.SetBool("isGrounded", IsGrounded());
         handleAttack();
         Movement();
+        handleImpact();
         handleAnimation();
-        //handleImpact();
 
         character.Move(currentMovement * Time.deltaTime);
 
-        isGrounded = character.isGrounded;
-        anim.SetBool("isGrounded", isGrounded);
 
         handleGravity();
         handleJump();
@@ -111,6 +113,7 @@ public class PlayerController : MonoBehaviour
     {
         isAttacking = anim.GetBool("isAttacking");
         isJumping = anim.GetBool("isJumping");
+        isGrounded = anim.GetBool("isGrounded");
     }
 
     void Movement()
@@ -147,12 +150,12 @@ public class PlayerController : MonoBehaviour
     }
     private void handleGravity()
     {
-        bool isFalling = currentMovement.y <= 0.0f;
+        bool isFalling = !IsGrounded() && currentMovement.y < 0f;
         float fallMultiplier = 2.0f;
 
         //anim.SetBool( "isFalling", isFalling);
 
-        if (character.isGrounded)
+        if (IsGrounded())
         {
             anim.SetBool("isFalling", false);
             currentMovement.y = groundedGravity;
@@ -178,37 +181,40 @@ public class PlayerController : MonoBehaviour
 
     void handleJump()
     {
-        if (isJumpPressed && character.isGrounded && !isJumping)
+        if (isJumpPressed && IsGrounded() && !isJumping)
         {
             anim.SetBool("isJumping", true);
 
             currentMovement.y = initialJumpVelocity * 0.5f;
         }
-        else if (!isJumpPressed && isJumping && character.isGrounded)
+        else if (!isJumpPressed && isJumping && IsGrounded())
         {
             anim.SetBool("isJumping", false);
         }
     }
     void handleAttack()
     {
-        if (isAttackPressed && character.isGrounded && !isAttacking)
+        if (isAttackPressed && IsGrounded() && !isAttacking)
         {
             canMove = false;
             anim.SetBool("isAttacking", true);
+            AddImpact(transform.forward, 2f);
         }
     }
 
     void AddImpact(Vector3 dir, float force)
     {
         dir.Normalize();
-        if (dir.y < 0) dir.y = -dir.y; // reflect down force on the ground
-        impact += dir.normalized * force / 10;
+        impactDirection = dir.normalized * force * 10f;
     }
     void handleImpact()
     {
-        if (impact.magnitude > 0.2) character.Move(impact * Time.deltaTime);
+        if (impactDirection.magnitude > 0.2)
+        {
+            currentMovement += impactDirection;
+        }
         // consumes the impact energy each cycle:
-        impact = Vector3.Lerp(impact, Vector3.zero, 5 * Time.deltaTime);
+        impactDirection = Vector3.Lerp(impactDirection, Vector3.zero, 4 * Time.deltaTime);
     }
 
 
@@ -221,7 +227,10 @@ public class PlayerController : MonoBehaviour
     }
 
 
-
+    bool IsGrounded()
+    {
+        return Physics.Raycast(transform.position, Vector3.down, 0.01f, groundMask);
+    }
 
 
 
