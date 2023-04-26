@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc1d2acfce8df634abf915f7de55e0da, type: 3}
-  m_Name: Apple
+  m_Script: {fileID: 11500000, guid: 006cbcc4fd05044838f8e21eece6558a, type: 3}
+  m_Name: Kick
   m_EditorClassIdentifier: 
-  itemID: 000001
-  itemName: Apple
-  itemDescription: C'est  un fruit.
-  itemCost: 2
-  itemSprite: {fileID: 0}
+  attackID: 000001
+  attackName: Kick
+  attackAnimation: kick
+  attackDescription: C'est un coup de pied.
+  attackCost: 0

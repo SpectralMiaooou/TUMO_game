@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
 
     //Attack variables
     private bool isAttackPressed = false;
+    public Attack light_attack;
+    public Attack heavy_attack;
 
     //Movement variables
     public Vector3 currentMovement;
@@ -111,7 +113,7 @@ public class PlayerController : MonoBehaviour
 
     void handleAnimation()
     {
-        isAttacking = anim.GetBool("isAttacking");
+        //isAttacking = anim.GetBool("isAttacking");
         isJumping = anim.GetBool("isJumping");
         isGrounded = anim.GetBool("isGrounded");
     }
@@ -197,8 +199,10 @@ public class PlayerController : MonoBehaviour
         if (isAttackPressed && IsGrounded() && !isAttacking)
         {
             canMove = false;
-            anim.SetBool("isAttacking", true);
-            AddImpact(transform.forward, 2f);
+            isAttacking = true;
+            anim.Play(light_attack.attackAnimation);
+            //anim.SetBool("isAttacking", true);
+            //ddImpact(transform.forward, 2f);
         }
     }
 
@@ -222,7 +226,7 @@ public class PlayerController : MonoBehaviour
 
     void disableAttack()
     {
-        anim.SetBool("isAttacking", false);
+        //anim.SetBool("isAttacking", false);
         canMove = true;
     }
 
