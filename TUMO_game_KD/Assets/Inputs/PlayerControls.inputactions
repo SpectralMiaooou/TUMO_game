@@ -24,7 +24,16 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Attack",
+                    "name": "Look",
+                    "type": "PassThrough",
+                    "id": "a732e5a6-e92e-4c76-a409-6d2279a70045",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PrimaryAttack",
                     "type": "Button",
                     "id": "e75010be-da68-4ea5-b5b3-4a949310226c",
                     "expectedControlType": "Button",
@@ -33,10 +42,19 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Look",
-                    "type": "PassThrough",
-                    "id": "a732e5a6-e92e-4c76-a409-6d2279a70045",
-                    "expectedControlType": "Vector2",
+                    "name": "SecondaryAttack",
+                    "type": "Button",
+                    "id": "062d8d4a-0dba-472e-b09f-3b7bb899e6f9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "UltimateAttack",
+                    "type": "Button",
+                    "id": "bf17adaa-22e3-46a6-adff-3d029728a774",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -165,28 +183,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "45f002d5-b8c9-4ef9-a188-af40741ee778",
-                    "path": "<Gamepad>/rightTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "640a7d84-b141-4ac4-bcee-b68589040848",
-                    "path": "<Keyboard>/f",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
                     "name": "2D Vector",
                     "id": "f4c28b1d-0f06-48b1-b6a5-8fef24801297",
                     "path": "2DVector",
@@ -240,6 +236,50 @@
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "ed228659-c0d6-4735-862e-7f681f6c587b",
+                    "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SecondaryAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "45f002d5-b8c9-4ef9-a188-af40741ee778",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PrimaryAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "640a7d84-b141-4ac4-bcee-b68589040848",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PrimaryAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2ea77bf6-5a63-400d-8504-6e1cfded9d33",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "UltimateAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

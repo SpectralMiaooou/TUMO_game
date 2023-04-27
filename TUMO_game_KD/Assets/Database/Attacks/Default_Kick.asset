@@ -9,9 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd8ba2e967a6b4e49a74df34fbb60806, type: 3}
-  m_Name: AttackDatabase
+  m_Script: {fileID: 11500000, guid: 006cbcc4fd05044838f8e21eece6558a, type: 3}
+  m_Name: Default_Kick
   m_EditorClassIdentifier: 
-  allAttacks:
-  - {fileID: 11400000, guid: c2efe147f2e66425182f258e97e53251, type: 2}
-  - {fileID: 11400000, guid: aaffd07a3b0f7431badf3ef668eeee6e, type: 2}
+  attackID: 1
+  attackName: Kick
+  attackType: 2
+  attackDescription: C'est un coup de pied.
+  attackCost: 0

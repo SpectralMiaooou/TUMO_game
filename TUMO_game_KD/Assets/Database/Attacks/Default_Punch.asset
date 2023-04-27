@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 006cbcc4fd05044838f8e21eece6558a, type: 3}
-  m_Name: Kick
+  m_Name: Default_Punch
   m_EditorClassIdentifier: 
-  attackID: 000001
-  attackName: Kick
-  attackAnimation: kick
-  attackDescription: C'est un coup de pied.
+  attackID: 2
+  attackName: Punch
+  attackType: 1
+  attackDescription: C'est un coup de poing.
   attackCost: 0
