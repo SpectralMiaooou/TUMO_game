@@ -7,5 +7,8 @@ public class Weapon : ScriptableObject
 {
     public string weaponID;
     public string weaponName;
+    public Attack primaryAttack;
+    public Attack secondaryAttack;
+    public Attack ultimateAttack;
     public int damage;
 }

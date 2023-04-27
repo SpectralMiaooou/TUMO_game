@@ -222,12 +222,12 @@ public class PlayerController : MonoBehaviour
     }
 
 
-
-
     void disableAttack()
     {
         //anim.SetBool("isAttacking", false);
+        isAttacking = false;
         canMove = true;
+        anim.Play("Walking");
     }
 
 
