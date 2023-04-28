@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AIController : MonoBehaviour
 {
 
     //Animation variables
     Animator anim;
+
+    public NavMeshAgent agent;
+    CharacterController character;
+    public Transform player;
 
     //Movement variables
     public float speed = 10f;
@@ -19,7 +24,7 @@ public class AIController : MonoBehaviour
     private float groundedGravity = -0.05f;
 
     //GroundCheck variables
-    private bool isGrounded;
+    public bool isGrounded;
     public Transform groundCheck;
     public LayerMask groundMask;
 
@@ -47,20 +52,29 @@ public class AIController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        agent = GetComponent<NavMeshAgent>();
+        anim = GetComponent<Animator>();
+        agent.isStopped = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+        print(IsGrounded());
+        handleDecision();
         anim.SetBool("isGrounded", IsGrounded());
-        handleAttack();
-        Movement();
+        if(!isGrounded)
+        {
+            agent.isStopped = true;
+        }
+        //handleAttack();
+        //Movement();
         handleAnimation();
 
-        //character.Move(currentMovement * Time.deltaTime);
+        agent.Move(currentMovement * Time.deltaTime);
 
 
-        //handleGravity();
+        handleGravity();
         //handleJump();
     }
 
@@ -121,11 +135,50 @@ public class AIController : MonoBehaviour
             }
         }
     }
+    private void handleGravity()
+    {
+        bool isFalling = !IsGrounded() && currentMovement.y < 0f;
+        float fallMultiplier = 2.0f;
+
+        //anim.SetBool( "isFalling", isFalling);
+
+        if (IsGrounded())
+        {
+            anim.SetBool("isFalling", false);
+            currentMovement.y = groundedGravity;
+        }
+        else if (isFalling)
+        {
+            anim.SetBool("isFalling", true);
+            float previousYVelocity = currentMovement.y;
+            float newYVelocity = currentMovement.y + (gravity * fallMultiplier * Time.deltaTime);
+            float nextYVelocity = Mathf.Max((previousYVelocity + newYVelocity) * 0.5f, -20.0f);
+            currentMovement.y = nextYVelocity;
+        }
+        else
+        {
+            anim.SetBool("isFalling", false);
+            float previousYVelocity = currentMovement.y;
+            float newYVelocity = currentMovement.y + (gravity * Time.deltaTime);
+            float nextYVelocity = (previousYVelocity + newYVelocity) * 0.5f;
+            currentMovement.y = nextYVelocity;
+        }
+    }
 
 
     bool IsGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, 0.01f, groundMask);
+        return Physics.Raycast(transform.position, Vector3.down, 0.1f, groundMask);
+    }
+
+    void handleDecision()
+    {
+        if(IsGrounded())
+        {
+            canMove = false;
+            agent.isStopped = false;
+            agent.SetDestination(player.position);
+        }
     }
 
 }
