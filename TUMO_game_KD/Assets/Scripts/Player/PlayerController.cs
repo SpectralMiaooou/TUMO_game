@@ -60,6 +60,7 @@ public class PlayerController : MonoBehaviour
         controls.Gameplay.Movement.canceled += ctx => move = Vector2.zero;
         controls.Gameplay.Jump.started += onJump;
         controls.Gameplay.Jump.canceled += onJump;
+
         controls.Gameplay.PrimaryAttack.started += onPrimaryAttack;
         controls.Gameplay.PrimaryAttack.canceled += onPrimaryAttack;
 
