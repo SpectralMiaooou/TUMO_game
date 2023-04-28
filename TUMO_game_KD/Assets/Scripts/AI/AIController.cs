@@ -54,7 +54,7 @@ public class AIController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
-        agent.isStopped = true;
+        disableChasing();
     }
 
     // Update is called once per frame
@@ -63,10 +63,6 @@ public class AIController : MonoBehaviour
         print(IsGrounded());
         handleDecision();
         anim.SetBool("isGrounded", IsGrounded());
-        if(!isGrounded)
-        {
-            agent.isStopped = true;
-        }
         //handleAttack();
         //Movement();
         handleAnimation();
@@ -175,10 +171,26 @@ public class AIController : MonoBehaviour
     {
         if(IsGrounded())
         {
-            canMove = false;
-            agent.isStopped = false;
-            agent.SetDestination(player.position);
+            enableChasing();
+            targetDestination(player.position);
         }
+    }
+
+    void targetDestination(Vector3 pos)
+    {
+        anim.SetFloat("inputX", 1f);
+        agent.SetDestination(pos);
+    }
+
+    void enableChasing()
+    {
+        canMove = false;
+        agent.isStopped = false;
+    }
+    void disableChasing()
+    {
+        canMove = true;
+        agent.isStopped = true;
     }
 
 }
