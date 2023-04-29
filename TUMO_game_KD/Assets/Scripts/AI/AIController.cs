@@ -12,6 +12,9 @@ public class AIController : MonoBehaviour
     //Animation variables
     Animator anim;
 
+    //Impact variables
+    private Vector3 impactDirection = Vector3.zero;
+
     public NavMeshAgent agent;
     CharacterController character;
     public Transform player;
@@ -66,6 +69,7 @@ public class AIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         handleDecision();
         anim.SetBool("isGrounded", IsGrounded());
         handleAttack();
@@ -184,7 +188,7 @@ public class AIController : MonoBehaviour
                 disableChasing();
                 isPrimaryAttackPressed = true;
             }
-            else if(!field.isLineOfSight && Vector3.Distance(transform.position, player.position) > 10f)
+            else if(!field.isLineOfSight )
             {
                 enableChasing(player.position);
                 lastShotChase = Time.time;
@@ -197,6 +201,7 @@ public class AIController : MonoBehaviour
                 enableChasing(player.position);
             }
             else
+
             {
                 disableChasing();
             }
@@ -221,6 +226,22 @@ public class AIController : MonoBehaviour
         //isAttacking = false;
         canMove = true;
         //anim.Play("Walking");
+    }
+
+    void AddImpact()
+    {
+        float force = 1f;
+        Vector3 dir = transform.forward;
+        impactDirection = dir.normalized * force * 10f;
+    }
+    void handleImpact()
+    {
+        if (impactDirection.magnitude > 0.2)
+        {
+            currentMovement += impactDirection;
+        }
+        // consumes the impact energy each cycle:
+        impactDirection = Vector3.Lerp(impactDirection, Vector3.zero, 4 * Time.deltaTime);
     }
 
 }

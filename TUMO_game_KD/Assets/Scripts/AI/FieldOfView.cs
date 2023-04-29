@@ -6,6 +6,7 @@ using UnityEngine;
 public class FieldOfView : MonoBehaviour
 {
     public float radius;
+    public float radiusAttack;
     [Range(0,360)]
     public float angle;
 
@@ -63,8 +64,8 @@ public class FieldOfView : MonoBehaviour
             canSeePlayer = false;
 
         RaycastHit hit;
-        Debug.DrawRay(target.position, transform.forward * 3f, Color.white);
-        if (Physics.Raycast(target.position, transform.forward, out hit, 3f))
+        Debug.DrawRay(target.position, transform.forward * radiusAttack, Color.white);
+        if (Physics.Raycast(target.position, transform.forward, out hit, radiusAttack))
         {
             if (hit.collider.gameObject.tag == "Player")
             {
