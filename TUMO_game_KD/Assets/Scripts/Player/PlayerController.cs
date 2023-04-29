@@ -23,9 +23,10 @@ public class PlayerController : MonoBehaviour
     private bool isPrimaryAttackPressed = false;
     private bool isSecondaryAttackPressed = false;
     private bool isUltimateAttackPressed = false;
+    public Weapon weapon;/*
     public Attack primary_attack;
     public Attack secondary_attack;
-    public Attack ultimate_attack;
+    public Attack ultimate_attack;*/
     private bool isAttacking;
 
     //Movement variables
@@ -209,22 +210,22 @@ public class PlayerController : MonoBehaviour
             {
                 canMove = false;
                 anim.SetBool("isAttacking", true);
-                anim.SetInteger("attackID", primary_attack.attackID);
-                anim.SetInteger("attackType", primary_attack.attackType);
+                anim.SetInteger("attackID", weapon.primaryAttack.attackID);
+                anim.SetInteger("attackType", weapon.primaryAttack.attackType);
             }
             if(isSecondaryAttackPressed)
             {
                 canMove = false;
                 anim.SetBool("isAttacking", true);
-                anim.SetInteger("attackID", secondary_attack.attackID);
-                anim.SetInteger("attackType", secondary_attack.attackType);
+                anim.SetInteger("attackID", weapon.secondaryAttack.attackID);
+                anim.SetInteger("attackType", weapon.secondaryAttack.attackType);
             }
             if(isUltimateAttackPressed)
             {
                 canMove = false;
                 anim.SetBool("isAttacking", true);
-                anim.SetInteger("attackID", ultimate_attack.attackID);
-                anim.SetInteger("attackType", ultimate_attack.attackType);
+                anim.SetInteger("attackID", weapon.ultimateAttack.attackID);
+                anim.SetInteger("attackType", weapon.ultimateAttack.attackType);
             }
         }
     }

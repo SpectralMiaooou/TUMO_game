@@ -13,6 +13,8 @@ public class AIController : MonoBehaviour
     CharacterController character;
     public Transform player;
 
+    public FieldOfView field;
+
     //Movement variables
     public float speed = 10f;
     public Vector3 move;
@@ -32,9 +34,10 @@ public class AIController : MonoBehaviour
     private bool isPrimaryAttackPressed = false;
     private bool isSecondaryAttackPressed = false;
     private bool isUltimateAttackPressed = false;
+    public Weapon weapon;/*
     public Attack primary_attack;
     public Attack secondary_attack;
-    public Attack ultimate_attack;
+    public Attack ultimate_attack;*/
     private bool isAttacking;
 
     //Jumping variables
@@ -104,33 +107,35 @@ public class AIController : MonoBehaviour
         currentMovement.x = move.x;
         currentMovement.z = move.z;
     }
+
     void handleAttack()
     {
         if (IsGrounded() && !isAttacking)
         {
-            if (isPrimaryAttackPressed)
+            if(isPrimaryAttackPressed)
             {
                 canMove = false;
                 anim.SetBool("isAttacking", true);
-                anim.SetInteger("attackID", primary_attack.attackID);
-                anim.SetInteger("attackType", primary_attack.attackType);
+                anim.SetInteger("attackID", weapon.primaryAttack.attackID);
+                anim.SetInteger("attackType", weapon.primaryAttack.attackType);
             }
-            if (isSecondaryAttackPressed)
+            if(isSecondaryAttackPressed)
             {
                 canMove = false;
                 anim.SetBool("isAttacking", true);
-                anim.SetInteger("attackID", secondary_attack.attackID);
-                anim.SetInteger("attackType", secondary_attack.attackType);
+                anim.SetInteger("attackID", weapon.secondaryAttack.attackID);
+                anim.SetInteger("attackType", weapon.secondaryAttack.attackType);
             }
-            if (isUltimateAttackPressed)
+            if(isUltimateAttackPressed)
             {
                 canMove = false;
                 anim.SetBool("isAttacking", true);
-                anim.SetInteger("attackID", ultimate_attack.attackID);
-                anim.SetInteger("attackType", ultimate_attack.attackType);
+                anim.SetInteger("attackID", weapon.ultimateAttack.attackID);
+                anim.SetInteger("attackType", weapon.ultimateAttack.attackType);
             }
         }
     }
+
     private void handleGravity()
     {
         bool isFalling = !IsGrounded() && currentMovement.y < 0f;
@@ -169,28 +174,27 @@ public class AIController : MonoBehaviour
 
     void handleDecision()
     {
-        if(IsGrounded())
+        if(field.canSeePlayer && IsGrounded())
         {
-            enableChasing();
-            targetDestination(player.position);
+            enableChasing(player.position);
+        }
+        else if(!field.canSeePlayer && IsGrounded())
+        {
+            disableChasing();
         }
     }
-
-    void targetDestination(Vector3 pos)
-    {
-        anim.SetFloat("inputX", 1f);
-        agent.SetDestination(pos);
-    }
-
-    void enableChasing()
+    void enableChasing(Vector3 pos)
     {
         canMove = false;
         agent.isStopped = false;
+        anim.SetFloat("inputX", 1f);
+        agent.SetDestination(pos);
     }
     void disableChasing()
     {
         canMove = true;
         agent.isStopped = true;
+        anim.SetFloat("inputX", 0f);
     }
 
 }
