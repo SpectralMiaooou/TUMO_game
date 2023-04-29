@@ -5,6 +5,9 @@ using UnityEngine.AI;
 
 public class AIController : MonoBehaviour
 {
+    //Time variables
+    private float lastShotChase;
+    private float cooldownChase = 10f;
 
     //Animation variables
     Animator anim;
@@ -63,10 +66,9 @@ public class AIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        print(IsGrounded());
         handleDecision();
         anim.SetBool("isGrounded", IsGrounded());
-        //handleAttack();
+        handleAttack();
         //Movement();
         handleAnimation();
 
@@ -174,13 +176,30 @@ public class AIController : MonoBehaviour
 
     void handleDecision()
     {
+        isPrimaryAttackPressed = false;
         if(field.canSeePlayer && IsGrounded())
         {
-            enableChasing(player.position);
+            if(field.isLineOfSight)
+            {
+                disableChasing();
+                isPrimaryAttackPressed = true;
+            }
+            else if(!field.isLineOfSight && Vector3.Distance(transform.position, player.position) > 10f)
+            {
+                enableChasing(player.position);
+                lastShotChase = Time.time;
+            }
         }
         else if(!field.canSeePlayer && IsGrounded())
         {
-            disableChasing();
+            if(Time.time - lastShotChase < cooldownChase)
+            {
+                enableChasing(player.position);
+            }
+            else
+            {
+                disableChasing();
+            }
         }
     }
     void enableChasing(Vector3 pos)
@@ -195,6 +214,13 @@ public class AIController : MonoBehaviour
         canMove = true;
         agent.isStopped = true;
         anim.SetFloat("inputX", 0f);
+    }
+    void disableAttack()
+    {
+        anim.SetBool("isAttacking", false);
+        //isAttacking = false;
+        canMove = true;
+        //anim.Play("Walking");
     }
 
 }

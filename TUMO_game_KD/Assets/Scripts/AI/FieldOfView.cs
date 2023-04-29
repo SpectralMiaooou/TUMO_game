@@ -63,8 +63,8 @@ public class FieldOfView : MonoBehaviour
             canSeePlayer = false;
 
         RaycastHit hit;
-        Debug.DrawRay(target.position, transform.forward * radius, Color.white);
-        if (Physics.Raycast(target.position, transform.forward, out hit, radius))
+        Debug.DrawRay(target.position, transform.forward * 3f, Color.white);
+        if (Physics.Raycast(target.position, transform.forward, out hit, 3f))
         {
             if (hit.collider.gameObject.tag == "Player")
             {

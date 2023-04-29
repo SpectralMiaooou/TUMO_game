@@ -11,6 +11,10 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 impact = Vector3.zero;
 
+    //Health variables
+    private float maxHealthLife = 100f;
+    private float healthLife;
+    //public Text
 
     //Input variables
     PlayerControls controls;
@@ -101,6 +105,8 @@ public class PlayerController : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        healthLife = maxHealthLife;
     }
 
     // Update is called once per frame
@@ -230,9 +236,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void AddImpact(Vector3 dir, float force)
+    void AddImpact()
     {
-        dir.Normalize();
+        float force = 1f;
+        Vector3 dir = transform.forward;
         impactDirection = dir.normalized * force * 10f;
     }
     void handleImpact()
