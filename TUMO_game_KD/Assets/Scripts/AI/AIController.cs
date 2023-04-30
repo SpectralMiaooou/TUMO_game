@@ -74,6 +74,14 @@ public class AIController : MonoBehaviour
         anim.SetBool("isGrounded", IsGrounded());
         handleAttack();
         //Movement();
+        if (agent.velocity.magnitude > 0.1)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(agent.velocity.normalized), Time.deltaTime * 10f);
+        }
+        else if(Vector3.Distance(transform.position, player.position) < field.radiusAttack)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(player.position - transform.position), Time.deltaTime * 10f);
+        }
         handleAnimation();
 
         agent.Move(currentMovement * Time.deltaTime);
@@ -181,6 +189,40 @@ public class AIController : MonoBehaviour
     void handleDecision()
     {
         isPrimaryAttackPressed = false;
+        if (field.canSeePlayer && IsGrounded())
+        {
+            lastShotChase = Time.time;
+            if (Vector3.Distance(transform.position, player.position) > field.radiusAttack - 0.1)
+            {
+                enableChasing(player.position);
+            }
+            else
+            {
+                disableChasing();
+                if (field.isLineOfSight)
+                {
+                    isPrimaryAttackPressed = true;
+                }
+            }
+        }
+        else if (!field.canSeePlayer && IsGrounded())
+        {
+            if (Time.time - lastShotChase < cooldownChase)
+            {
+                enableChasing(player.position);
+            }
+            else
+
+            {
+                disableChasing();
+            }
+        }
+
+
+
+
+        /*
+        isPrimaryAttackPressed = false;
         if(field.canSeePlayer && IsGrounded())
         {
             if(field.isLineOfSight)
@@ -188,10 +230,17 @@ public class AIController : MonoBehaviour
                 disableChasing();
                 isPrimaryAttackPressed = true;
             }
-            else if(!field.isLineOfSight )
+            else if(!field.isLineOfSight)
             {
-                enableChasing(player.position);
                 lastShotChase = Time.time;
+                if(Vector3.Distance(transform.position, player.position) > field.radiusAttack)
+                {
+                    enableChasing(player.position);
+                }
+                else
+                {
+                    print("cc");
+                }
             }
         }
         else if(!field.canSeePlayer && IsGrounded())
@@ -205,7 +254,7 @@ public class AIController : MonoBehaviour
             {
                 disableChasing();
             }
-        }
+        }*/
     }
     void enableChasing(Vector3 pos)
     {

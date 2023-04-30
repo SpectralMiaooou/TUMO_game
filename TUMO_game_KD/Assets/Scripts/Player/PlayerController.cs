@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 impact = Vector3.zero;
 
+    private bool canTurn180;
+
     //Health variables
     private float maxHealthLife = 100f;
     private float healthLife;
@@ -156,7 +158,21 @@ public class PlayerController : MonoBehaviour
 
             if (move.magnitude > 0.1)
             {
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredMoveDirection), Time.deltaTime * 10f);
+                float angle = Mathf.Abs(transform.rotation.eulerAngles.y -  Quaternion.LookRotation(desiredMoveDirection).eulerAngles.y);
+
+                if(angle > 160)
+                {
+                    canTurn180 = true;
+                    canMove = false;
+                    anim.SetBool("canTurn180", true);
+                }
+                else
+                {
+                    anim.SetBool("canTurn180", false);
+                    canTurn180 = false;
+                    transform.rotation = Quaternion.LookRotation(desiredMoveDirection);
+                }
+
             }
             
             desiredMoveDirection = transform.forward * move.magnitude * speed;
@@ -259,6 +275,12 @@ public class PlayerController : MonoBehaviour
         //isAttacking = false;
         canMove = true;
         //anim.Play("Walking");
+    }
+    void disableTurn()
+    {
+        anim.SetBool("canTurn180", false);
+        canMove = true;
+        canTurn180 = false;
     }
 
 
