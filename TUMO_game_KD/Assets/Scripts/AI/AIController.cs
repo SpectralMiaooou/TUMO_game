@@ -192,7 +192,7 @@ public class AIController : MonoBehaviour
         if (field.canSeePlayer && IsGrounded())
         {
             lastShotChase = Time.time;
-            if (Vector3.Distance(transform.position, player.position) > field.radiusAttack - 0.1)
+            if (Vector3.Distance(transform.position, player.position) > agent.stoppingDistance - 0.1f)
             {
                 enableChasing(player.position);
             }

@@ -36,10 +36,16 @@ public class PlayerController : MonoBehaviour
     private bool isAttacking;
 
     //Movement variables
-    public float speed = 10f;
+    private float actualSpeed;
+    public float walkingSpeed = 3f;
+    public float runningSpeed = 10f;
     public Vector3 desiredMoveDirection;
     public Vector3 currentMovement;
+    private bool isRunPressed = false;
     private bool canMove = true;
+    private bool isWalking;
+    private bool isRunning;
+    private bool isMoving;
 
     //Gravity variables
     private float gravity = -9.81f;
@@ -67,6 +73,8 @@ public class PlayerController : MonoBehaviour
         controls.Gameplay.Movement.canceled += ctx => move = Vector2.zero;
         controls.Gameplay.Jump.started += onJump;
         controls.Gameplay.Jump.canceled += onJump;
+        controls.Gameplay.Run.started += onRun;
+        controls.Gameplay.Run.canceled += onRun;
 
         controls.Gameplay.PrimaryAttack.started += onPrimaryAttack;
         controls.Gameplay.PrimaryAttack.canceled += onPrimaryAttack;
@@ -109,6 +117,7 @@ public class PlayerController : MonoBehaviour
         Cursor.visible = false;
 
         healthLife = maxHealthLife;
+        actualSpeed = walkingSpeed;
     }
 
     // Update is called once per frame
@@ -116,7 +125,7 @@ public class PlayerController : MonoBehaviour
     {
         anim.SetBool("isGrounded", IsGrounded());
         handleAttack();
-        Movement();
+        handleMovement();
         handleImpact();
         handleAnimation();
 
@@ -130,20 +139,36 @@ public class PlayerController : MonoBehaviour
     void handleAnimation()
     {
         isAttacking = anim.GetBool("isAttacking");
+        isMoving = anim.GetBool("isMoving");
         isJumping = anim.GetBool("isJumping");
         isGrounded = anim.GetBool("isGrounded");
+        isWalking = anim.GetBool("isWalking");
+        isRunning = anim.GetBool("isRunning");
     }
 
-    void Movement()
+    void handleMovement()
     {
         desiredMoveDirection = Vector3.zero;
 
         if (canMove)
         {
-            anim.SetFloat("inputX", move.magnitude, 0.0f, Time.deltaTime * 2f);
+            if(isRunning)
+            {
+                actualSpeed = runningSpeed;
+            }
+            else
+            {
+                actualSpeed = walkingSpeed;
+                if(isRunPressed)
+                {
+                    actualSpeed = runningSpeed;
+                    isRunning = true;
+                    anim.SetBool("isRunning", true);
+                }
+            }
+
             currentMovement.x = 0f;
             currentMovement.z = 0f;
-
 
             var forward = cam.transform.forward;
             var right = cam.transform.right;
@@ -156,26 +181,34 @@ public class PlayerController : MonoBehaviour
 
             desiredMoveDirection = forward * move.y + right * move.x;
 
-            if (move.magnitude > 0.1)
+            anim.SetBool("isMoving", false);
+            if (move.magnitude < 0.2)
             {
-                float angle = Mathf.Abs(transform.rotation.eulerAngles.y -  Quaternion.LookRotation(desiredMoveDirection).eulerAngles.y);
+                anim.SetBool("isWalking", false);
+                anim.SetBool("isRunning", false);
+            }
+            else if (move.magnitude < 0.9)
+            {
+                anim.SetBool("isWalking", false);
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredMoveDirection), 10f * Time.deltaTime);
+            }
+            else //if (move.magnitude > 0.9)
+            {
+                desiredMoveDirection *= actualSpeed;
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredMoveDirection), 10f * Time.deltaTime);
 
-                if(angle > 160)
+                if(!isRunning)
                 {
-                    canTurn180 = true;
-                    canMove = false;
-                    anim.SetBool("canTurn180", true);
+                    anim.SetBool("isWalking", true);
+                    anim.SetBool("isRunning", false);
                 }
                 else
                 {
-                    anim.SetBool("canTurn180", false);
-                    canTurn180 = false;
-                    transform.rotation = Quaternion.LookRotation(desiredMoveDirection);
+                    anim.SetBool("isRunning", true);
+                    anim.SetBool("isWalking", false);
                 }
-
+                anim.SetBool("isMoving", true);
             }
-            
-            desiredMoveDirection = transform.forward * move.magnitude * speed;
         }
         currentMovement.x = desiredMoveDirection.x;
         currentMovement.z = desiredMoveDirection.z;
@@ -272,6 +305,7 @@ public class PlayerController : MonoBehaviour
     void disableAttack()
     {
         anim.SetBool("isAttacking", false);
+        anim.SetBool("isRunning", false);
         //isAttacking = false;
         canMove = true;
         //anim.Play("Walking");
@@ -307,5 +341,9 @@ public class PlayerController : MonoBehaviour
     void onUltimateAttack(InputAction.CallbackContext context)
     {
         isUltimateAttackPressed = context.ReadValueAsButton();
+    }
+    void onRun(InputAction.CallbackContext context)
+    {
+        isRunPressed = context.ReadValueAsButton();
     }
 }

@@ -58,13 +58,22 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Run",
+                    "type": "Button",
+                    "id": "b28471a7-41c1-4db4-a51d-a4835220674a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
                     "name": "Joystick",
                     "id": "a23dc86a-dcd6-4379-96b9-84ed4f83b715",
-                    "path": "2DVector",
+                    "path": "2DVector(mode=2)",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -250,6 +259,17 @@
                 },
                 {
                     "name": "",
+                    "id": "3cbc41b8-3015-4d88-8245-d4136b594576",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SecondaryAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "45f002d5-b8c9-4ef9-a188-af40741ee778",
                     "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
@@ -278,6 +298,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "UltimateAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1f79ddb2-0f6b-4f57-913e-7db464ce440e",
+                    "path": "<Gamepad>/leftStickPress",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Run",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
