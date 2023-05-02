@@ -33,6 +33,9 @@ public class AIController : MonoBehaviour
     public Vector3 move;
     public Vector3 currentMovement;
     private bool canMove = true;
+    private bool isWalking;
+    private bool isRunning;
+    private bool isMoving;
 
     //Gravity variables
     private float gravity = -9.81f;
@@ -47,10 +50,7 @@ public class AIController : MonoBehaviour
     private bool isPrimaryAttackPressed = false;
     private bool isSecondaryAttackPressed = false;
     private bool isUltimateAttackPressed = false;
-    public Weapon weapon;/*
-    public Attack primary_attack;
-    public Attack secondary_attack;
-    public Attack ultimate_attack;*/
+    public Weapon weapon;
     private bool isAttacking;
 
     //Jumping variables
@@ -59,6 +59,11 @@ public class AIController : MonoBehaviour
     private float maxJumpHeight = 3f;
     private float maxJumpTime = 1f;
     private float initialJumpVelocity;
+
+    private void Awake()
+    {
+        setupJumpVariables();
+    }
 
     void setupJumpVariables()
     {
@@ -80,17 +85,23 @@ public class AIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        warpPosition();
+        print(character.isGrounded);
         anim.SetBool("isGrounded", character.isGrounded);
         handleDecision("attack");
         handleAttack();
         //handleMovement();
         if (agent.velocity.magnitude > 0.1)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(agent.velocity.normalized), Time.deltaTime * 10f);
+            Vector3 dirEnemy = agent.velocity.normalized;
+            dirEnemy.y = 0f;
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dirEnemy), Time.deltaTime * 10f);
         }
         else if(Vector3.Distance(transform.position, player.position) < field.radiusAttack)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(player.position - transform.position), Time.deltaTime * 10f);
+            Vector3 dirEnemy = player.position - transform.position;
+            dirEnemy.y = 0f;
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dirEnemy), Time.deltaTime * 10f);
         }
         handleAnimation();
 
@@ -104,9 +115,13 @@ public class AIController : MonoBehaviour
     void handleAnimation()
     {
         isAttacking = anim.GetBool("isAttacking");
+        isMoving = anim.GetBool("isMoving");
         isJumping = anim.GetBool("isJumping");
         isGrounded = anim.GetBool("isGrounded");
+        isWalking = anim.GetBool("isWalking");
+        isRunning = anim.GetBool("isRunning");
     }
+
     void handleMovement()
     {
         move = Vector3.zero;
@@ -191,16 +206,16 @@ public class AIController : MonoBehaviour
 
     bool IsGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, 0.1f, groundMask);
+        return Physics.Raycast(transform.position, Vector3.down, 0.05f, groundMask);
     }
 
     void handleDecision(string type)
     {
-        print("cc");
-        if (type == "attack")
+        enableTargeting(player.position, "run");
+        if (type == "attac")
         {
             isPrimaryAttackPressed = false;
-            if (field.canSeePlayer && character.isGrounded)
+            if (field.canSeePlayer && IsGrounded())
             {
                 lastShotChase = Time.time;
                 if (field.isLineOfSight)
@@ -214,7 +229,7 @@ public class AIController : MonoBehaviour
                     enableTargeting(player.position, "run");
                 }
             }
-            else if (!field.canSeePlayer && character.isGrounded)
+            else if (!field.canSeePlayer && IsGrounded())
             {
                 if (Time.time - lastShotChase < cooldownChase)
                 {
@@ -277,6 +292,17 @@ public class AIController : MonoBehaviour
         }
         // consumes the impact energy each cycle:
         impactDirection = Vector3.Lerp(impactDirection, Vector3.zero, 4 * Time.deltaTime);
+    }
+
+    void warpPosition()
+    {
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position, Vector3.down, out hit, groundMask))
+        {
+            this.transform.position = new Vector3(transform.position.x, hit.point.y, transform.position.z);
+
+            print(hit.point);
+        }
     }
 
 }

@@ -29,10 +29,7 @@ public class PlayerController : MonoBehaviour
     private bool isPrimaryAttackPressed = false;
     private bool isSecondaryAttackPressed = false;
     private bool isUltimateAttackPressed = false;
-    public Weapon weapon;/*
-    public Attack primary_attack;
-    public Attack secondary_attack;
-    public Attack ultimate_attack;*/
+    public Weapon weapon;
     private bool isAttacking;
 
     //Movement variables
@@ -213,6 +210,7 @@ public class PlayerController : MonoBehaviour
         currentMovement.x = desiredMoveDirection.x;
         currentMovement.z = desiredMoveDirection.z;
     }
+
     private void handleGravity()
     {
         bool isFalling = !character.isGrounded && currentMovement.y < 0f;
@@ -255,6 +253,7 @@ public class PlayerController : MonoBehaviour
             anim.SetBool("isJumping", false);
         }
     }
+    
     void handleAttack()
     {
         if (character.isGrounded && !isAttacking)

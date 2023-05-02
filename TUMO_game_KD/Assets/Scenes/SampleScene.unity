@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -481,7 +481,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.0182739, y: -0.0000000010751512, z: 1.9650484e-11, w: 0.99983305}
+  m_LocalRotation: {x: 0.0182739, y: 0.0000000010752194, z: -1.965173e-11, w: 0.99983305}
   m_LocalPosition: {x: 0, y: 12.01, z: -10.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1062,7 +1062,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 702024654}
-  m_LocalRotation: {x: 0.0182739, y: 0.0000000010749205, z: -1.9646269e-11, w: 0.99983305}
+  m_LocalRotation: {x: 0.0182739, y: -0.0000000010752194, z: 1.965173e-11, w: 0.99983305}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1472,7 +1472,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 997992301}
-  m_LocalRotation: {x: 0.0182739, y: -0.0000000010751512, z: 1.9650483e-11, w: 0.99983305}
+  m_LocalRotation: {x: 0.0182739, y: 0.0000000010752194, z: -1.965173e-11, w: 0.99983305}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1550,7 +1550,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1066048532}
-  m_LocalRotation: {x: 0.0182739, y: 0.0000000012338894, z: -2.2551737e-11, w: 0.99983305}
+  m_LocalRotation: {x: 0.0182739, y: 0.0000000010752194, z: -1.965173e-11, w: 0.99983305}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2225,7 +2225,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 919132148146018310}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.66, y: 7.15, z: 10.76}
+  m_LocalPosition: {x: 0.66, y: 11.42, z: 10.76}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5404,7 +5404,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 1.8
-  m_BaseOffset: 0.01
+  m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!114 &5866666020775598282
