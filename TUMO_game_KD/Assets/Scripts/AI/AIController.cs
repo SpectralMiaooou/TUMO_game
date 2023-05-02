@@ -12,6 +12,11 @@ public class AIController : MonoBehaviour
     //Animation variables
     Animator anim;
 
+    //HealthLife variables
+    private float maxHealthLife = 100f;
+    private float healthLife;
+    //public Text
+
     //Impact variables
     private Vector3 impactDirection = Vector3.zero;
 
@@ -22,7 +27,9 @@ public class AIController : MonoBehaviour
     public FieldOfView field;
 
     //Movement variables
-    public float speed = 10f;
+    private float actualSpeed;
+    public float walkingSpeed = 3f;
+    public float runningSpeed = 10f;
     public Vector3 move;
     public Vector3 currentMovement;
     private bool canMove = true;
@@ -52,6 +59,7 @@ public class AIController : MonoBehaviour
     private float maxJumpHeight = 3f;
     private float maxJumpTime = 1f;
     private float initialJumpVelocity;
+
     void setupJumpVariables()
     {
         float timeToApex = maxJumpTime / 2;
@@ -63,17 +71,19 @@ public class AIController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
-        disableChasing();
+        character = GetComponent<CharacterController>();
+        disableTargeting();
+        healthLife = maxHealthLife;
+        actualSpeed = walkingSpeed;
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        handleDecision();
-        anim.SetBool("isGrounded", IsGrounded());
+        anim.SetBool("isGrounded", character.isGrounded);
+        handleDecision("attack");
         handleAttack();
-        //Movement();
+        //handleMovement();
         if (agent.velocity.magnitude > 0.1)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(agent.velocity.normalized), Time.deltaTime * 10f);
@@ -84,7 +94,7 @@ public class AIController : MonoBehaviour
         }
         handleAnimation();
 
-        agent.Move(currentMovement * Time.deltaTime);
+        character.Move(currentMovement * Time.deltaTime);
 
 
         handleGravity();
@@ -97,7 +107,7 @@ public class AIController : MonoBehaviour
         isJumping = anim.GetBool("isJumping");
         isGrounded = anim.GetBool("isGrounded");
     }
-    void Movement()
+    void handleMovement()
     {
         move = Vector3.zero;
 
@@ -116,7 +126,7 @@ public class AIController : MonoBehaviour
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(move), Time.deltaTime * 10f);
             }
 
-            move = transform.forward * move.magnitude * speed;
+            move = transform.forward * move.magnitude * actualSpeed;
         }
         currentMovement.x = move.x;
         currentMovement.z = move.z;
@@ -124,7 +134,7 @@ public class AIController : MonoBehaviour
 
     void handleAttack()
     {
-        if (IsGrounded() && !isAttacking)
+        if (character.isGrounded && !isAttacking)
         {
             if(isPrimaryAttackPressed)
             {
@@ -152,12 +162,10 @@ public class AIController : MonoBehaviour
 
     private void handleGravity()
     {
-        bool isFalling = !IsGrounded() && currentMovement.y < 0f;
+        bool isFalling = !character.isGrounded && currentMovement.y < 0f;
         float fallMultiplier = 2.0f;
 
-        //anim.SetBool( "isFalling", isFalling);
-
-        if (IsGrounded())
+        if (character.isGrounded)
         {
             anim.SetBool("isFalling", false);
             currentMovement.y = groundedGravity;
@@ -186,88 +194,66 @@ public class AIController : MonoBehaviour
         return Physics.Raycast(transform.position, Vector3.down, 0.1f, groundMask);
     }
 
-    void handleDecision()
+    void handleDecision(string type)
     {
-        isPrimaryAttackPressed = false;
-        if (field.canSeePlayer && IsGrounded())
+        print("cc");
+        if (type == "attack")
         {
-            lastShotChase = Time.time;
-            if (Vector3.Distance(transform.position, player.position) > agent.stoppingDistance - 0.1f)
-            {
-                enableChasing(player.position);
-            }
-            else
-            {
-                disableChasing();
-                if (field.isLineOfSight)
-                {
-                    isPrimaryAttackPressed = true;
-                }
-            }
-        }
-        else if (!field.canSeePlayer && IsGrounded())
-        {
-            if (Time.time - lastShotChase < cooldownChase)
-            {
-                enableChasing(player.position);
-            }
-            else
-
-            {
-                disableChasing();
-            }
-        }
-
-
-
-
-        /*
-        isPrimaryAttackPressed = false;
-        if(field.canSeePlayer && IsGrounded())
-        {
-            if(field.isLineOfSight)
-            {
-                disableChasing();
-                isPrimaryAttackPressed = true;
-            }
-            else if(!field.isLineOfSight)
+            isPrimaryAttackPressed = false;
+            if (field.canSeePlayer && character.isGrounded)
             {
                 lastShotChase = Time.time;
-                if(Vector3.Distance(transform.position, player.position) > field.radiusAttack)
+                if (field.isLineOfSight)
                 {
-                    enableChasing(player.position);
+                    disableTargeting();
+                    isPrimaryAttackPressed = true;
+
                 }
                 else
                 {
-                    print("cc");
+                    enableTargeting(player.position, "run");
+                }
+            }
+            else if (!field.canSeePlayer && character.isGrounded)
+            {
+                if (Time.time - lastShotChase < cooldownChase)
+                {
+                    enableTargeting(player.position, "run");
+                }
+                else
+                {
+                    disableTargeting();
                 }
             }
         }
-        else if(!field.canSeePlayer && IsGrounded())
-        {
-            if(Time.time - lastShotChase < cooldownChase)
-            {
-                enableChasing(player.position);
-            }
-            else
-
-            {
-                disableChasing();
-            }
-        }*/
     }
-    void enableChasing(Vector3 pos)
+    void enableTargeting(Vector3 pos, string type)
     {
         canMove = false;
+        agent.Warp(transform.position);
         agent.isStopped = false;
-        anim.SetFloat("inputX", 1f);
+        anim.SetBool("isMoving", true);
+        if (type == "run")
+        {
+            anim.SetBool("isRunning", true);
+            anim.SetBool("isWalking", false);
+            agent.speed = runningSpeed;
+        }
+        else if (type == "walk")
+        {
+            anim.SetBool("isWalking", true);
+            anim.SetBool("isRunning", false);
+            agent.speed = walkingSpeed;
+        }
         agent.SetDestination(pos);
     }
-    void disableChasing()
+    void disableTargeting()
     {
         canMove = true;
         agent.isStopped = true;
-        anim.SetFloat("inputX", 0f);
+        anim.SetBool("isRunning", false);
+        anim.SetBool("isWalking", false);
+        anim.SetBool("isMoving", false);
     }
     void disableAttack()
     {

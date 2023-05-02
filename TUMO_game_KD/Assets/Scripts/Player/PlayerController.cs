@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
 
     private bool canTurn180;
 
-    //Health variables
+    //HealthLife variables
     private float maxHealthLife = 100f;
     private float healthLife;
     //public Text
@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        anim.SetBool("isGrounded", IsGrounded());
+        anim.SetBool("isGrounded", character.isGrounded);
         handleAttack();
         handleMovement();
         handleImpact();
@@ -215,12 +215,10 @@ public class PlayerController : MonoBehaviour
     }
     private void handleGravity()
     {
-        bool isFalling = !IsGrounded() && currentMovement.y < 0f;
+        bool isFalling = !character.isGrounded && currentMovement.y < 0f;
         float fallMultiplier = 2.0f;
 
-        //anim.SetBool( "isFalling", isFalling);
-
-        if (IsGrounded())
+        if (character.isGrounded)
         {
             anim.SetBool("isFalling", false);
             currentMovement.y = groundedGravity;
@@ -246,20 +244,20 @@ public class PlayerController : MonoBehaviour
 
     void handleJump()
     {
-        if (isJumpPressed && IsGrounded() && !isJumping)
+        if (isJumpPressed && character.isGrounded && !isJumping)
         {
             anim.SetBool("isJumping", true);
 
             currentMovement.y = initialJumpVelocity * 0.5f;
         }
-        else if (!isJumpPressed && isJumping && IsGrounded())
+        else if (!isJumpPressed && isJumping && character.isGrounded)
         {
             anim.SetBool("isJumping", false);
         }
     }
     void handleAttack()
     {
-        if (IsGrounded() && !isAttacking)
+        if (character.isGrounded && !isAttacking)
         {
             if(isPrimaryAttackPressed)
             {
@@ -320,7 +318,7 @@ public class PlayerController : MonoBehaviour
 
     bool IsGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, 0.01f, groundMask);
+        return Physics.Raycast(groundCheck.transform.position, Vector3.down, 0.05f, groundMask);
     }
 
 
