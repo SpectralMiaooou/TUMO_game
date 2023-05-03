@@ -211,6 +211,10 @@ public class AIController : MonoBehaviour
 
     void handleDecision(string type)
     {
+
+        //agent.updatePosition = false;
+        //agent.updateRotation = false;
+
         enableTargeting(player.position, "run");
         if (type == "attac")
         {
@@ -245,8 +249,8 @@ public class AIController : MonoBehaviour
     void enableTargeting(Vector3 pos, string type)
     {
         canMove = false;
-        agent.Warp(transform.position);
-        agent.isStopped = false;
+        //agent.Warp(transform.position);
+        agent.enabled = true;
         anim.SetBool("isMoving", true);
         if (type == "run")
         {
@@ -260,12 +264,13 @@ public class AIController : MonoBehaviour
             anim.SetBool("isRunning", false);
             agent.speed = walkingSpeed;
         }
-        agent.SetDestination(pos);
+        //agent.SetDestination(pos);
+        agent.destination = player.position;
     }
     void disableTargeting()
     {
         canMove = true;
-        agent.isStopped = true;
+        agent.enabled = false;
         anim.SetBool("isRunning", false);
         anim.SetBool("isWalking", false);
         anim.SetBool("isMoving", false);
@@ -301,7 +306,7 @@ public class AIController : MonoBehaviour
         {
             this.transform.position = new Vector3(transform.position.x, hit.point.y, transform.position.z);
 
-            print(hit.point);
+            //print(hit.point);
         }
     }
 
