@@ -11,7 +11,6 @@ public class FieldOfView : MonoBehaviour
     [Range(0,360)]
     public float angle;
 
-    public NavMeshAgent agent;
     public GameObject playerRef;
 
     public LayerMask targetMask;
@@ -26,10 +25,8 @@ public class FieldOfView : MonoBehaviour
 
     private void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
         playerRef = GameObject.FindGameObjectWithTag("Player");
         StartCoroutine(FOVRoutine());
-        radiusAttack = agent.stoppingDistance + 0.2f;
     }
 
     private IEnumerator FOVRoutine()

@@ -77,23 +77,33 @@ public class AIController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
         character = GetComponent<CharacterController>();
+
         disableTargeting();
+        
         healthLife = maxHealthLife;
         actualSpeed = walkingSpeed;
+
+        agent.updatePosition = false;
+        agent.updateRotation = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        warpPosition();
         print(character.isGrounded);
-        anim.SetBool("isGrounded", character.isGrounded);
+        currentMovement.x = 0f;
+        currentMovement.z = 0f;
+
+        print(IsGrounded());
+        anim.SetBool("isGrounded", IsGrounded());
         handleDecision("attack");
+
+        
         handleAttack();
         //handleMovement();
         if (agent.velocity.magnitude > 0.1)
         {
-            Vector3 dirEnemy = agent.velocity.normalized;
+            Vector3 dirEnemy = agent.desiredVelocity.normalized;
             dirEnemy.y = 0f;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dirEnemy), Time.deltaTime * 10f);
         }
@@ -103,12 +113,16 @@ public class AIController : MonoBehaviour
             dirEnemy.y = 0f;
             transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dirEnemy), Time.deltaTime * 10f);
         }
+        handleImpact();
         handleAnimation();
 
-        character.Move(currentMovement * Time.deltaTime);
+        //agent.Move(currentMovement.normalized * runningSpeed * Time.deltaTime);
+        character.Move(currentMovement.normalized * runningSpeed * Time.deltaTime);
+        agent.velocity = character.velocity;
 
 
         handleGravity();
+        return;
         //handleJump();
     }
 
@@ -149,7 +163,7 @@ public class AIController : MonoBehaviour
 
     void handleAttack()
     {
-        if (character.isGrounded && !isAttacking)
+        if (IsGrounded()&& !isAttacking)
         {
             if(isPrimaryAttackPressed)
             {
@@ -177,10 +191,10 @@ public class AIController : MonoBehaviour
 
     private void handleGravity()
     {
-        bool isFalling = !character.isGrounded && currentMovement.y < 0f;
+        bool isFalling = !IsGrounded() && currentMovement.y < 0f;
         float fallMultiplier = 2.0f;
 
-        if (character.isGrounded)
+        if (IsGrounded())
         {
             anim.SetBool("isFalling", false);
             currentMovement.y = groundedGravity;
@@ -211,18 +225,14 @@ public class AIController : MonoBehaviour
 
     void handleDecision(string type)
     {
-
-        //agent.updatePosition = false;
-        //agent.updateRotation = false;
-
-        enableTargeting(player.position, "run");
-        if (type == "attac")
+        //enableTargeting(player.position, "run");
+        if (type == "attack")
         {
             isPrimaryAttackPressed = false;
             if (field.canSeePlayer && IsGrounded())
             {
                 lastShotChase = Time.time;
-                if (field.isLineOfSight)
+                if (field.isLineOfSight || Vector3.Distance(transform.position, player.position) < field.radiusAttack)
                 {
                     disableTargeting();
                     isPrimaryAttackPressed = true;
@@ -246,26 +256,29 @@ public class AIController : MonoBehaviour
             }
         }
     }
+
     void enableTargeting(Vector3 pos, string type)
     {
-        canMove = false;
-        //agent.Warp(transform.position);
-        agent.enabled = true;
-        anim.SetBool("isMoving", true);
-        if (type == "run")
+        if(canMove)
         {
-            anim.SetBool("isRunning", true);
-            anim.SetBool("isWalking", false);
-            agent.speed = runningSpeed;
+            agent.enabled = true;
+            anim.SetBool("isMoving", true);
+            if (type == "run")
+            {
+                anim.SetBool("isRunning", true);
+                anim.SetBool("isWalking", false);
+                agent.speed = runningSpeed;
+            }
+            else if (type == "walk")
+            {
+                anim.SetBool("isWalking", true);
+                anim.SetBool("isRunning", false);
+                agent.speed = walkingSpeed;
+            }
+            //agent.SetDestination(pos);
+            agent.destination = player.position;
+            currentMovement = agent.desiredVelocity;
         }
-        else if (type == "walk")
-        {
-            anim.SetBool("isWalking", true);
-            anim.SetBool("isRunning", false);
-            agent.speed = walkingSpeed;
-        }
-        //agent.SetDestination(pos);
-        agent.destination = player.position;
     }
     void disableTargeting()
     {
@@ -297,17 +310,6 @@ public class AIController : MonoBehaviour
         }
         // consumes the impact energy each cycle:
         impactDirection = Vector3.Lerp(impactDirection, Vector3.zero, 4 * Time.deltaTime);
-    }
-
-    void warpPosition()
-    {
-        RaycastHit hit;
-        if(Physics.Raycast(transform.position, Vector3.down, out hit, groundMask))
-        {
-            this.transform.position = new Vector3(transform.position.x, hit.point.y, transform.position.z);
-
-            //print(hit.point);
-        }
     }
 
 }
