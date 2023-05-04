@@ -13,11 +13,6 @@ public class PlayerController : MonoBehaviour
 
     private bool canTurn180;
 
-    //HealthLife variables
-    private float maxHealthLife = 100f;
-    private float healthLife;
-    //public Text
-
     //Input variables
     PlayerControls controls;
     Vector2 move;
@@ -113,7 +108,6 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        healthLife = maxHealthLife;
         actualSpeed = walkingSpeed;
     }
 
