@@ -12,4 +12,5 @@ public class Attack : ScriptableObject
     [TextArea]
     public string attackDescription;
     public int attackCost;
+    public float attackDamage;
 }

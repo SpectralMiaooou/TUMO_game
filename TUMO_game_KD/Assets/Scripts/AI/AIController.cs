@@ -117,7 +117,7 @@ public class AIController : MonoBehaviour
         handleAnimation();
 
         //agent.Move(currentMovement.normalized * runningSpeed * Time.deltaTime);
-        character.Move(currentMovement.normalized * runningSpeed * Time.deltaTime);
+        character.Move(currentMovement * Time.deltaTime);
         agent.velocity = character.velocity;
 
 

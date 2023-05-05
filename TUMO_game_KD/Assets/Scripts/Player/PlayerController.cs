@@ -24,7 +24,9 @@ public class PlayerController : MonoBehaviour
     private bool isPrimaryAttackPressed = false;
     private bool isSecondaryAttackPressed = false;
     private bool isUltimateAttackPressed = false;
-    public Weapon weapon;
+    public GameObject weaponObject;
+    private AttackAbility weaponAbility;
+    private Weapon weapon;
     private bool isAttacking;
 
     //Movement variables
@@ -104,6 +106,8 @@ public class PlayerController : MonoBehaviour
         cam = Camera.main.transform;
         character = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
+        weaponAbility = weaponObject.GetComponent<AttackAbility>();
+        weapon = weaponAbility.weapon;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -258,6 +262,7 @@ public class PlayerController : MonoBehaviour
                 anim.SetBool("isAttacking", true);
                 anim.SetInteger("attackID", weapon.primaryAttack.attackID);
                 anim.SetInteger("attackType", weapon.primaryAttack.attackType);
+                activeAttackHit();
             }
             if(isSecondaryAttackPressed)
             {
@@ -306,6 +311,11 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("canTurn180", false);
         canMove = true;
         canTurn180 = false;
+    }
+
+    public void activeAttackHit(Attack attack)
+    {
+        weaponAbility.EnableAttack(attack.attackType);
     }
 
 
