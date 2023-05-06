@@ -11,6 +11,7 @@ public class FieldOfView : MonoBehaviour
     [Range(0,360)]
     public float angle;
 
+    public List<GameObject> Enemies = new List<GameObject>();
     public GameObject playerRef;
 
     public LayerMask targetMask;
@@ -81,5 +82,15 @@ public class FieldOfView : MonoBehaviour
         {
             isLineOfSight = false;
         }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        Enemies.Add(other.gameObject);
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        Enemies.Remove(other.gameObject);
     }
 }

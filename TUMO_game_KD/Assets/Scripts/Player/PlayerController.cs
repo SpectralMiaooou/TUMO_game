@@ -262,7 +262,7 @@ public class PlayerController : MonoBehaviour
                 anim.SetBool("isAttacking", true);
                 anim.SetInteger("attackID", weapon.primaryAttack.attackID);
                 anim.SetInteger("attackType", weapon.primaryAttack.attackType);
-                activeAttackHit();
+                //activeAttackHit();
             }
             if(isSecondaryAttackPressed)
             {
