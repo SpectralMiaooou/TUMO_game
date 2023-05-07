@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackID: 1
   attackName: Kick
+  attackAnimation: kick
   attackType: 2
-  attackDescription: C'est un coup de pied.
   attackCost: 0
+  attackDamage: 50
+  attackDescription: C'est un coup de pied.

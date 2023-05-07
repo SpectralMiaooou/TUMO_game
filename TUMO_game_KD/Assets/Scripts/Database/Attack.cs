@@ -6,11 +6,12 @@ using UnityEngine;
 
 public class Attack : ScriptableObject
 {
-    public int attackID;
+    public string attackID;
     public string attackName;
+    public string attackAnimation;
     public int attackType;
-    [TextArea]
-    public string attackDescription;
     public int attackCost;
     public float attackDamage;
+    [TextArea]
+    public string attackDescription;
 }

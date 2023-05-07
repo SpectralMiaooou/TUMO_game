@@ -169,22 +169,19 @@ public class AIController : MonoBehaviour
             {
                 canMove = false;
                 anim.SetBool("isAttacking", true);
-                anim.SetInteger("attackID", weapon.primaryAttack.attackID);
-                anim.SetInteger("attackType", weapon.primaryAttack.attackType);
+                //
             }
             if(isSecondaryAttackPressed)
             {
                 canMove = false;
                 anim.SetBool("isAttacking", true);
-                anim.SetInteger("attackID", weapon.secondaryAttack.attackID);
-                anim.SetInteger("attackType", weapon.secondaryAttack.attackType);
+                //
             }
             if(isUltimateAttackPressed)
             {
                 canMove = false;
                 anim.SetBool("isAttacking", true);
-                anim.SetInteger("attackID", weapon.ultimateAttack.attackID);
-                anim.SetInteger("attackType", weapon.ultimateAttack.attackType);
+                //
             }
         }
     }

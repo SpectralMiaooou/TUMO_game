@@ -14,16 +14,12 @@ public class PlayerController : MonoBehaviour
     private bool canTurn180;
 
     //Input variables
-    PlayerControls controls;
-    Vector2 move;
+    PlayerInputs inputManager = new PlayerInputs();
 
     //Impact variables
     private Vector3 impactDirection = Vector3.zero;
 
     //Attack variables
-    private bool isPrimaryAttackPressed = false;
-    private bool isSecondaryAttackPressed = false;
-    private bool isUltimateAttackPressed = false;
     public GameObject weaponObject;
     private AttackAbility weaponAbility;
     private Weapon weapon;
@@ -35,7 +31,6 @@ public class PlayerController : MonoBehaviour
     public float runningSpeed = 10f;
     public Vector3 desiredMoveDirection;
     public Vector3 currentMovement;
-    private bool isRunPressed = false;
     private bool canMove = true;
     private bool isWalking;
     private bool isRunning;
@@ -51,7 +46,6 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundMask;
 
     //Jumping variables
-    private bool isJumpPressed = false;
     private bool isJumping = false;
     private float maxJumpHeight = 3f;
     private float maxJumpTime = 1f;
@@ -61,23 +55,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        controls = new PlayerControls();
-
-        controls.Gameplay.Movement.performed += ctx => move = ctx.ReadValue<Vector2>();
-        controls.Gameplay.Movement.canceled += ctx => move = Vector2.zero;
-        controls.Gameplay.Jump.started += onJump;
-        controls.Gameplay.Jump.canceled += onJump;
-        controls.Gameplay.Run.started += onRun;
-        controls.Gameplay.Run.canceled += onRun;
-
-        controls.Gameplay.PrimaryAttack.started += onPrimaryAttack;
-        controls.Gameplay.PrimaryAttack.canceled += onPrimaryAttack;
-
-        controls.Gameplay.SecondaryAttack.started += onSecondaryAttack;
-        controls.Gameplay.SecondaryAttack.canceled += onSecondaryAttack;
-
-        controls.Gameplay.UltimateAttack.started += onUltimateAttack;
-        controls.Gameplay.UltimateAttack.canceled += onUltimateAttack;
+        inputManager.SetInput();
 
         setupJumpVariables();
     }
@@ -91,11 +69,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable()
     {
-        controls.Gameplay.Enable();
+        inputManager.controls.Gameplay.Enable();
     }
     private void OnDisable()
     {
-        controls.Gameplay.Disable();
+        inputManager.controls.Gameplay.Disable();
     }
 
 
@@ -143,6 +121,7 @@ public class PlayerController : MonoBehaviour
 
     void handleMovement()
     {
+        Vector2 move = inputManager.move;
         desiredMoveDirection = Vector3.zero;
 
         if (canMove)
@@ -154,7 +133,7 @@ public class PlayerController : MonoBehaviour
             else
             {
                 actualSpeed = walkingSpeed;
-                if(isRunPressed)
+                if(inputManager.isRunPressed)
                 {
                     actualSpeed = runningSpeed;
                     isRunning = true;
@@ -240,13 +219,13 @@ public class PlayerController : MonoBehaviour
 
     void handleJump()
     {
-        if (isJumpPressed && character.isGrounded && !isJumping)
+        if (inputManager.isJumpPressed && character.isGrounded && !isJumping)
         {
             anim.SetBool("isJumping", true);
 
             currentMovement.y = initialJumpVelocity * 0.5f;
         }
-        else if (!isJumpPressed && isJumping && character.isGrounded)
+        else if (!inputManager.isJumpPressed && isJumping && character.isGrounded)
         {
             anim.SetBool("isJumping", false);
         }
@@ -256,27 +235,27 @@ public class PlayerController : MonoBehaviour
     {
         if (character.isGrounded && !isAttacking)
         {
-            if(isPrimaryAttackPressed)
+            if(inputManager.isPrimaryAttackPressed)
             {
                 canMove = false;
                 anim.SetBool("isAttacking", true);
-                anim.SetInteger("attackID", weapon.primaryAttack.attackID);
-                anim.SetInteger("attackType", weapon.primaryAttack.attackType);
+                anim.Play("Attacks");
+                anim.Play(weapon.primaryAttack.attackAnimation);
                 //activeAttackHit();
             }
-            if(isSecondaryAttackPressed)
+            if(inputManager.isSecondaryAttackPressed)
             {
                 canMove = false;
                 anim.SetBool("isAttacking", true);
-                anim.SetInteger("attackID", weapon.secondaryAttack.attackID);
-                anim.SetInteger("attackType", weapon.secondaryAttack.attackType);
+                anim.Play("Attacks");
+                anim.Play(weapon.secondaryAttack.attackAnimation);
+                //
             }
-            if(isUltimateAttackPressed)
+            if(inputManager.isUltimateAttackPressed)
             {
                 canMove = false;
                 anim.SetBool("isAttacking", true);
-                anim.SetInteger("attackID", weapon.ultimateAttack.attackID);
-                anim.SetInteger("attackType", weapon.ultimateAttack.attackType);
+                //
             }
         }
     }
@@ -322,29 +301,5 @@ public class PlayerController : MonoBehaviour
     bool IsGrounded()
     {
         return Physics.Raycast(groundCheck.transform.position, Vector3.down, 0.05f, groundMask);
-    }
-
-
-
-    void onJump(InputAction.CallbackContext context)
-    {
-        isJumpPressed = context.ReadValueAsButton();
-    }
-
-    void onPrimaryAttack(InputAction.CallbackContext context)
-    {
-        isPrimaryAttackPressed = context.ReadValueAsButton();
-    }
-    void onSecondaryAttack(InputAction.CallbackContext context)
-    {
-        isSecondaryAttackPressed = context.ReadValueAsButton();
-    }
-    void onUltimateAttack(InputAction.CallbackContext context)
-    {
-        isUltimateAttackPressed = context.ReadValueAsButton();
-    }
-    void onRun(InputAction.CallbackContext context)
-    {
-        isRunPressed = context.ReadValueAsButton();
     }
 }

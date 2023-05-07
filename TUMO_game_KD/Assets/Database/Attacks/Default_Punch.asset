@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackID: 2
   attackName: Punch
+  attackAnimation: punching
   attackType: 1
-  attackDescription: C'est un coup de poing.
   attackCost: 0
+  attackDamage: 0
+  attackDescription: C'est un coup de poing.
