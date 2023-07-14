@@ -13,7 +13,7 @@ public class AttackAbility : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        damageHitbox = GetComponent<Collider>();
     }
 
     // Update is called once per frame
