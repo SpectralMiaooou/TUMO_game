@@ -90,11 +90,11 @@ public class AIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        print(character.isGrounded);
+        //print(character.isGrounded);
         currentMovement.x = 0f;
         currentMovement.z = 0f;
 
-        print(IsGrounded());
+        //print(IsGrounded());
         anim.SetBool("isGrounded", IsGrounded());
         handleDecision("attack");
 

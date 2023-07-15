@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 86b34371f41cbfa4a916374473dd7665, type: 3}
-  m_Name: Brass Knuckles
+  m_Name: Default
   m_EditorClassIdentifier: 
-  weaponID: 000002
-  weaponName: Brass Knuckles
+  weaponID: 000001
+  weaponName: 
   primaryAttack: {fileID: 11400000, guid: aaffd07a3b0f7431badf3ef668eeee6e, type: 2}
   secondaryAttack: {fileID: 11400000, guid: c2efe147f2e66425182f258e97e53251, type: 2}
   ultimateAttack: {fileID: 11400000, guid: c2efe147f2e66425182f258e97e53251, type: 2}
