@@ -31,7 +31,7 @@ public class AttackAbility : MonoBehaviour
             {
                 life.TakeDamage(weapon.primaryAttack.attackDamage);
             }
-            if (attackType == 2)
+            else if (attackType == 2)
             {
                 life.TakeDamage(weapon.secondaryAttack.attackDamage);
             }

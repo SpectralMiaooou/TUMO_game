@@ -298,6 +298,11 @@ public class PlayerController : MonoBehaviour
         impactDirection = Vector3.Lerp(impactDirection, Vector3.zero, 4 * Time.deltaTime);
     }
 
+    public void HitboxDamageManager()
+    {
+        //
+    }
+
 
     void disableAttack()
     {
