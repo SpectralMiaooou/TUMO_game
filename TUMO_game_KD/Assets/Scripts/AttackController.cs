@@ -2,23 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackController : MonoBehaviour
+public abstract class AttackController : MonoBehaviour
 {
     public Attack currentAttack;
     [SerializeField]
-    private GameObject prefabHurtbox; 
+    private GameObject prefabHurtbox;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public abstract void Attack();
 
     public void HurtboxEnable()
     {

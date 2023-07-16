@@ -24,6 +24,7 @@ public class HitboxDamageManager : MonoBehaviour
     {
         Gizmos.color = _color;
         Gizmos.DrawSphere(_pos, _radius);
+        Gizmos.DrawSphere(_pos + transform.forward * radius, _radius);
     }
 
     void handleAttackDamage(float _damage)
