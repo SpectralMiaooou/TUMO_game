@@ -12,10 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 006cbcc4fd05044838f8e21eece6558a, type: 3}
   m_Name: Default_Punch
   m_EditorClassIdentifier: 
-  attackID: 2
+  attackID: 000001
   attackName: Punch
   attackAnimation: punching
   attackType: 1
   attackCost: 0
-  attackDamage: 0
+  attackDamage: 50
+  height: 2
+  radius: 0.5
+  offset: {x: 0, y: 1.4, z: 0}
+  duration: 0.2
+  attackManager: {fileID: 6512182568089572397, guid: 60f2616546916854aa5b97cddb377f70,
+    type: 3}
   attackDescription: C'est un coup de poing.

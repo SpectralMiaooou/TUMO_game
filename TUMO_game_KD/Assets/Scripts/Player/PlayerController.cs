@@ -21,10 +21,10 @@ public class PlayerController : MonoBehaviour
     private Vector3 impactDirection = Vector3.zero;
 
     //Attack variables
-    public GameObject weaponObject;
-    private AttackAbility weaponAbility;
-    private Weapon weapon;
+    public Weapon weapon;
+    public AttackController attackController;
     private bool isAttacking;
+    private Attack currentAttack;
     public bool isPrimaryAttackPressed = false;
     public bool isSecondaryAttackPressed = false;
     public bool isUltimateAttackPressed = false;
@@ -107,8 +107,6 @@ public class PlayerController : MonoBehaviour
         cam = Camera.main.transform;
         character = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
-        weaponAbility = weaponObject.GetComponent<AttackAbility>();
-        weapon = weaponAbility.weapon;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -259,27 +257,52 @@ public class PlayerController : MonoBehaviour
         {
             if(isPrimaryAttackPressed)
             {
-                canMove = false;
-                anim.SetBool("isAttacking", true);
-                anim.Play("Attacks");
-                anim.Play(weapon.primaryAttack.attackAnimation);
+                _attackSetup(weapon.primaryAttack);
                 //activeAttackHit();
             }
             if(isSecondaryAttackPressed)
             {
-                canMove = false;
-                anim.SetBool("isAttacking", true);
-                anim.Play("Attacks");
-                anim.Play(weapon.secondaryAttack.attackAnimation);
-                //
+                _attackSetup(weapon.secondaryAttack);
             }
             if(isUltimateAttackPressed)
             {
-                canMove = false;
-                anim.SetBool("isAttacking", true);
-                //
+                _attackSetup(weapon.ultimateAttack);
             }
         }
+    }
+
+    private void _attackSetup(Attack attack)
+    {
+        canMove = false;
+        anim.SetBool("isAttacking", true);
+        anim.Play("Attacks");
+        anim.Play(attack.attackAnimation);
+        currentAttack = attack;
+    }
+    void disableAttack()
+    {
+        anim.SetBool("isAttacking", false);
+        anim.SetBool("isRunning", false);
+        //isAttacking = false;
+        canMove = true;
+        //anim.Play("Walking");
+    }
+    void disableTurn()
+    {
+        anim.SetBool("canTurn180", false);
+        canMove = true;
+        canTurn180 = false;
+    }
+
+    public void Attack()
+    {
+        GameObject attackObject = currentAttack.attackManager;
+        GameObject _object = Instantiate(attackObject, transform.position + currentAttack.offset, transform.rotation);
+        AttackController h = _object.GetComponent<AttackController>();
+        h.height = currentAttack.height;
+        h.radius = currentAttack.radius;
+        h.damage = currentAttack.attackDamage;
+        h.duration = currentAttack.duration;
     }
 
     void AddImpact()
@@ -297,33 +320,6 @@ public class PlayerController : MonoBehaviour
         // consumes the impact energy each cycle:
         impactDirection = Vector3.Lerp(impactDirection, Vector3.zero, 4 * Time.deltaTime);
     }
-
-    public void HitboxDamageManager()
-    {
-        //
-    }
-
-
-    void disableAttack()
-    {
-        anim.SetBool("isAttacking", false);
-        anim.SetBool("isRunning", false);
-        //isAttacking = false;
-        canMove = true;
-        //anim.Play("Walking");
-    }
-    void disableTurn()
-    {
-        anim.SetBool("canTurn180", false);
-        canMove = true;
-        canTurn180 = false;
-    }
-
-    public void activeAttackHit(Attack attack)
-    {
-        weaponAbility.EnableAttack(attack.attackType);
-    }
-
 
     bool IsGrounded()
     {

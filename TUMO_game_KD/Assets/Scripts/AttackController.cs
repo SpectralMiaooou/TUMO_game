@@ -7,15 +7,20 @@ public abstract class AttackController : MonoBehaviour
     public Attack currentAttack;
     [SerializeField]
     private GameObject prefabHurtbox;
+    public CapsuleCollider capsuleCollider;
 
-    public abstract void Attack();
+    public string user;
+    public float damage;
+    public float height;
+    public float radius;
+    public float duration;
 
-    public void HurtboxEnable()
+    public abstract void Start();
+
+    public void DrawCapsule(Vector3 _pos, float _radius, Color _color = default(Color))
     {
-        GameObject hurtbox = Instantiate(prefabHurtbox, transform.position, Quaternion.identity);
-        HitboxDamageManager h = hurtbox.GetComponent<HitboxDamageManager>();
-        h.height = currentAttack.height;
-        h.radius = currentAttack.radius;
-        h.damage = currentAttack.attackDamage;
+        Gizmos.color = _color;
+        Gizmos.DrawSphere(_pos, _radius);
+        Gizmos.DrawSphere(_pos + transform.forward * radius, _radius);
     }
 }
