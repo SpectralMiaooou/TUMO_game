@@ -9,13 +9,23 @@ public abstract class AttackController : MonoBehaviour
     private GameObject prefabHurtbox;
     public CapsuleCollider capsuleCollider;
 
-    public string user;
+    public GameObject user;
     public float damage;
     public float height;
     public float radius;
     public float duration;
 
     public abstract void Start();
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<HealthLife>() != null && other.gameObject != user)
+        {
+            HealthLife health = other.GetComponent<HealthLife>();
+            health.TakeDamage(damage);
+            Debug.Log(other.name + ": " + health.healthLife.ToString());
+        }
+    }
 
     public void DrawCapsule(Vector3 _pos, float _radius, Color _color = default(Color))
     {

@@ -5,8 +5,15 @@ using UnityEngine;
 public class HealthLife : MonoBehaviour
 {
     //HealthLife variables
-    private float maxHealthLife = 100f;
+    public float maxHealthLife = 1000f;
     public float healthLife;
+    public float shieldLife;
+
+    void Start()
+    {
+        healthLife = maxHealthLife;
+        shieldLife = 0f;
+    }
 
     public void TakeDamage(float _damage)
     {

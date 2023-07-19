@@ -17,7 +17,7 @@ MonoBehaviour:
   attackAnimation: kick
   attackType: 2
   attackCost: 0
-  attackDamage: 10
+  attackDamage: 100
   height: 2
   radius: 0.5
   offset: {x: 0, y: 0.9, z: 0}

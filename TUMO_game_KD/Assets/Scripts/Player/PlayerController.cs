@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -13,6 +14,10 @@ public class PlayerController : MonoBehaviour
 
     private bool canTurn180;
 
+    //HealthBar variables
+    public HealthLife life;
+    public Image healthBar;
+
     //Input variables
     public PlayerControls controls;
     public Vector2 move;
@@ -22,7 +27,6 @@ public class PlayerController : MonoBehaviour
 
     //Attack variables
     public Weapon weapon;
-    public AttackController attackController;
     private bool isAttacking;
     private Attack currentAttack;
     public bool isPrimaryAttackPressed = false;
@@ -106,6 +110,7 @@ public class PlayerController : MonoBehaviour
     {
         cam = Camera.main.transform;
         character = GetComponent<CharacterController>();
+        life = GetComponent<HealthLife>();
         anim = GetComponent<Animator>();
 
         Cursor.lockState = CursorLockMode.Locked;
@@ -128,6 +133,8 @@ public class PlayerController : MonoBehaviour
 
         handleGravity();
         handleJump();
+
+        handleHealthBar();
     }
 
     void handleAnimation()
@@ -184,12 +191,12 @@ public class PlayerController : MonoBehaviour
             else if (move.magnitude < 0.9)
             {
                 anim.SetBool("isWalking", false);
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredMoveDirection), 10f * Time.deltaTime);
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredMoveDirection), 25f * Time.deltaTime);
             }
             else //if (move.magnitude > 0.9)
             {
                 desiredMoveDirection *= actualSpeed;
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredMoveDirection), 10f * Time.deltaTime);
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredMoveDirection), 25f * Time.deltaTime);
 
                 if(!isRunning)
                 {
@@ -299,10 +306,19 @@ public class PlayerController : MonoBehaviour
         GameObject attackObject = currentAttack.attackManager;
         GameObject _object = Instantiate(attackObject, transform.position + currentAttack.offset, transform.rotation);
         AttackController h = _object.GetComponent<AttackController>();
+        h.user = gameObject;
         h.height = currentAttack.height;
         h.radius = currentAttack.radius;
         h.damage = currentAttack.attackDamage;
         h.duration = currentAttack.duration;
+    }
+
+    void handleHealthBar()
+    {
+        healthBar.fillAmount = Mathf.Lerp( healthBar.fillAmount, (life.healthLife / life.maxHealthLife), 3f * Time.deltaTime);
+
+        Color healthColor = Color.Lerp(Color.red, Color.green, (life.healthLife / life.maxHealthLife));
+        healthBar.color = healthColor;
     }
 
     void AddImpact()

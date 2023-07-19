@@ -12,17 +12,28 @@ public class Attack_default : AttackController
         capsuleCollider.height = height;
         capsuleCollider.direction = 2;
         //DrawCapsule(transform.position, radius, Color.green);
-        Debug.Log("hey");
+        Destroy(gameObject, 1f);
     }
 
     private void OnDrawGizmos()
-    {/*
-        // Calculate the center position of the box
-        Vector3 center = transform.position + transform.forward * (2f / 2f);
+    {
 
         // Draw the box gizmo
-        Gizmos.color = Color.yellow;
-        Gizmos.matrix = Matrix4x4.TRS(center, transform.rotation, Vector3.one);
-        Gizmos.DrawWireCube(Vector3.zero, new Vector3(radius, radius, height));*/
+        UnityEditor.Handles.color = Color.yellow;
+        UnityEditor.Handles.matrix = this.transform.localToWorldMatrix;/*
+        UnityEditor.Handles.DrawWireCube(new Vector3( 0f, 0f, height/2), new Vector3(radius*2, radius*2, height));*/
+
+        UnityEditor.Handles.DrawWireArc(Vector3.forward * (height - radius), Vector3.up, Vector3.left, 180, radius);
+        UnityEditor.Handles.DrawLine(new Vector3(-radius, 0f, radius), new Vector3(-radius, 0f, height - radius));
+        UnityEditor.Handles.DrawLine(new Vector3(radius, 0f, radius), new Vector3(radius, 0f, height - radius));
+        UnityEditor.Handles.DrawWireArc(Vector3.forward * (height - radius), Vector3.left, Vector3.up, -180, radius);
+        //draw frontways
+        UnityEditor.Handles.DrawWireArc(Vector3.forward * radius, Vector3.up, Vector3.left, -180, radius);
+        UnityEditor.Handles.DrawLine(new Vector3(0f, -radius, radius), new Vector3(0f, -radius, height - radius));
+        UnityEditor.Handles.DrawLine(new Vector3(0f, radius, radius), new Vector3(0f, radius, height - radius));
+        UnityEditor.Handles.DrawWireArc(Vector3.forward * radius, Vector3.left, Vector3.up, 180, radius);
+        //draw center
+        UnityEditor.Handles.DrawWireDisc(Vector3.forward * radius, Vector3.forward, radius);
+        UnityEditor.Handles.DrawWireDisc(Vector3.forward * (height - radius), Vector3.forward, radius);
     }
 }

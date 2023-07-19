@@ -12,11 +12,6 @@ public class AIController : MonoBehaviour
     //Animation variables
     Animator anim;
 
-    //HealthLife variables
-    private float maxHealthLife = 100f;
-    private float healthLife;
-    //public Text
-
     //Impact variables
     private Vector3 impactDirection = Vector3.zero;
 
@@ -52,6 +47,7 @@ public class AIController : MonoBehaviour
     private bool isUltimateAttackPressed = false;
     public Weapon weapon;
     private bool isAttacking;
+    private Attack currentAttack;
 
     //Jumping variables
     private bool isJumpPressed = false;
@@ -80,7 +76,6 @@ public class AIController : MonoBehaviour
 
         disableTargeting();
         
-        healthLife = maxHealthLife;
         actualSpeed = walkingSpeed;
 
         agent.updatePosition = false;
@@ -163,25 +158,19 @@ public class AIController : MonoBehaviour
 
     void handleAttack()
     {
-        if (IsGrounded()&& !isAttacking)
+        if (IsGrounded() && !isAttacking)
         {
             if(isPrimaryAttackPressed)
             {
-                canMove = false;
-                anim.SetBool("isAttacking", true);
-                //
+                _attackSetup(weapon.primaryAttack);
             }
-            if(isSecondaryAttackPressed)
+            if (isSecondaryAttackPressed)
             {
-                canMove = false;
-                anim.SetBool("isAttacking", true);
-                //
+                _attackSetup(weapon.secondaryAttack);
             }
-            if(isUltimateAttackPressed)
+            if (isUltimateAttackPressed)
             {
-                canMove = false;
-                anim.SetBool("isAttacking", true);
-                //
+                _attackSetup(weapon.ultimateAttack);
             }
         }
     }
@@ -291,6 +280,27 @@ public class AIController : MonoBehaviour
         //isAttacking = false;
         canMove = true;
         //anim.Play("Walking");
+    }
+
+    private void _attackSetup(Attack attack)
+    {
+        canMove = false;
+        anim.SetBool("isAttacking", true);
+        anim.Play("Attacks");
+        anim.Play(attack.attackAnimation);
+        currentAttack = attack;
+    }
+
+    public void Attack()
+    {
+        GameObject attackObject = currentAttack.attackManager;
+        GameObject _object = Instantiate(attackObject, transform.position + currentAttack.offset, transform.rotation);
+        AttackController h = _object.GetComponent<AttackController>();
+        h.user = gameObject;
+        h.height = currentAttack.height;
+        h.radius = currentAttack.radius;
+        h.damage = currentAttack.attackDamage;
+        h.duration = currentAttack.duration;
     }
 
     void AddImpact()
