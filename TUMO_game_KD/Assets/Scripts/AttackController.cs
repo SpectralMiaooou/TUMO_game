@@ -11,7 +11,7 @@ public abstract class AttackController : MonoBehaviour
 
     public GameObject user;
     public float damage;
-    public float height;
+    public float maxRange;
     public float radius;
     public float duration;
 
@@ -25,12 +25,5 @@ public abstract class AttackController : MonoBehaviour
             health.TakeDamage(damage);
             Debug.Log(other.name + ": " + health.healthLife.ToString());
         }
-    }
-
-    public void DrawCapsule(Vector3 _pos, float _radius, Color _color = default(Color))
-    {
-        Gizmos.color = _color;
-        Gizmos.DrawSphere(_pos, _radius);
-        Gizmos.DrawSphere(_pos + transform.forward * radius, _radius);
     }
 }

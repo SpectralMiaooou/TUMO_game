@@ -10,4 +10,5 @@ public class Weapon : ScriptableObject
     public Attack primaryAttack;
     public Attack secondaryAttack;
     public Attack ultimateAttack;
+    public float maxRange;
 }

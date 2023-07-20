@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Default
   m_EditorClassIdentifier: 
   weaponID: 000001
-  weaponName: 
+  weaponName: Bare Hands
   primaryAttack: {fileID: 11400000, guid: aaffd07a3b0f7431badf3ef668eeee6e, type: 2}
   secondaryAttack: {fileID: 11400000, guid: c2efe147f2e66425182f258e97e53251, type: 2}
   ultimateAttack: {fileID: 11400000, guid: c2efe147f2e66425182f258e97e53251, type: 2}
-  damage: 0
+  maxRange: 2

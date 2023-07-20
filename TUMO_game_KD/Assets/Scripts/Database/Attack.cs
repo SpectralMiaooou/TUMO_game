@@ -12,10 +12,9 @@ public class Attack : ScriptableObject
     public int attackType;
     public int attackCost;
     public float attackDamage;
-    public float height;
+    public float maxRange;
     public float radius;
     public Vector3 offset;
-    public float duration;
     public GameObject attackManager;
     [TextArea]
     public string attackDescription;

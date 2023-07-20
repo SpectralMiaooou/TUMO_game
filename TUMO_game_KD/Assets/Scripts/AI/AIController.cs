@@ -297,10 +297,9 @@ public class AIController : MonoBehaviour
         GameObject _object = Instantiate(attackObject, transform.position + currentAttack.offset, transform.rotation);
         AttackController h = _object.GetComponent<AttackController>();
         h.user = gameObject;
-        h.height = currentAttack.height;
+        h.maxRange = currentAttack.maxRange;
         h.radius = currentAttack.radius;
         h.damage = currentAttack.attackDamage;
-        h.duration = currentAttack.duration;
     }
 
     void AddImpact()
