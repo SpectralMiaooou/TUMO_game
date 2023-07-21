@@ -6,51 +6,67 @@ public class AttackAbility : MonoBehaviour
 {
     public Weapon weapon;
     public int attackType;
+    Animator anim;
+    public PlayerController player;
 
-    private Collider damageHitbox;
-
+    //Attack variables
+    /*
+    public Weapon weapon;
+    private bool isAttacking;*/
+    private Attack currentAttack;
 
     // Start is called before the first frame update
     void Start()
     {
-        damageHitbox = GetComponent<Collider>();
+        anim = GetComponent<Animator>();
+        player = GetComponent<PlayerController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        handleAttack();
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void Attack()
     {
-        HealthLife life = other.GetComponent<HealthLife>();
-        if(life != null)
+        GameObject attackObject = currentAttack.attackManager;
+        GameObject _object = Instantiate(attackObject, transform.position + currentAttack.offset, transform.rotation);
+        AttackController h = _object.GetComponent<AttackController>();
+        h.user = gameObject;
+        h.maxRange = currentAttack.maxRange;
+        h.radius = currentAttack.radius;
+        h.damage = currentAttack.attackDamage;
+    }
+
+    public void handleAttack()
+    {
+        if(player.isPrimaryAttackPressed)
         {
-            if (attackType == 1)
-            {
-                life.TakeDamage(weapon.primaryAttack.attackDamage);
-            }
-            else if (attackType == 2)
-            {
-                life.TakeDamage(weapon.secondaryAttack.attackDamage);
-            }
-            else
-            {
-                life.TakeDamage(weapon.ultimateAttack.attackDamage);
-            }
-            DisableAttack();
+            currentAttack = weapon.primaryAttack;
         }
-    }
+        else if(player.isSecondaryAttackPressed)
+        {
+            currentAttack = weapon.secondaryAttack;
+        }
+        else if(player.isUltimateAttackPressed)
+        {
+            currentAttack = weapon.ultimateAttack;
+        }
+        else
+        {
+            return;
+        }
 
-    public void EnableAttack(int type)
-    {
-        damageHitbox.enabled = true;
-        attackType = type;
+        anim.SetBool("isAttacking", true);
+        anim.SetBool("canMove", false);
+        anim.Play("Attacks");
+        anim.Play(currentAttack.attackAnimation);
     }
-
-    void DisableAttack()
+    public void disableAttack()
     {
-        damageHitbox.enabled = false;
+        anim.SetBool("isAttacking", false);
+        anim.SetBool("isRunning", false);
+        anim.SetBool("canMove", true);
     }
 }

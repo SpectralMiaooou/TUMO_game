@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
     //Animator variables
     Animator anim;
 
+    public PlayerController player;
+
     //Impact variables
     private Vector3 impactDirection = Vector3.zero;
 
@@ -45,21 +47,9 @@ public class PlayerMovement : MonoBehaviour
     private float maxJumpTime = 1f;
     private float initialJumpVelocity;
 
-    //Input variables
-    public PlayerControls controls;
-    public Vector2 move;
 
     private void Awake()
     {
-        controls = new PlayerControls();
-
-        controls.Gameplay.Movement.performed += ctx => move = ctx.ReadValue<Vector2>();
-        controls.Gameplay.Movement.canceled += ctx => move = Vector2.zero;
-        controls.Gameplay.Jump.started += onJump;
-        controls.Gameplay.Jump.canceled += onJump;
-        controls.Gameplay.Run.started += onRun;
-        controls.Gameplay.Run.canceled += onRun;
-
         setupJumpVariables();
     }
 
@@ -70,68 +60,44 @@ public class PlayerMovement : MonoBehaviour
         initialJumpVelocity = (2 * maxJumpHeight) / timeToApex;
     }
 
-    private void OnEnable()
-    {
-        controls.Gameplay.Enable();
-    }
-    private void OnDisable()
-    {
-        controls.Gameplay.Disable();
-    }
-
     // Start is called before the first frame update
     void Start()
     {
         cam = Camera.main.transform;
         character = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
+        player = GetComponent<PlayerController>();
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
         actualSpeed = walkingSpeed;
     }
-
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         anim.SetBool("isGrounded", character.isGrounded);
         handleMovement();
-        handleImpact();
-        handleAnimation();
-
-        character.Move(currentMovement * Time.deltaTime);
-
-
         handleGravity();
         handleJump();
     }
-
-    void handleAnimation()
+    public void handleMovement()
     {
-        isMoving = anim.GetBool("isMoving");
-        isJumping = anim.GetBool("isJumping");
-        isGrounded = anim.GetBool("isGrounded");
-        isWalking = anim.GetBool("isWalking");
-        isRunning = anim.GetBool("isRunning");
-    }
-    void handleMovement()
-    {
+        Vector2 move = player.move;
         desiredMoveDirection = Vector3.zero;
 
-        if (canMove)
+        if (player.canMove)
         {
-            if (isRunning)
+            if (player.isRunning)
             {
                 actualSpeed = runningSpeed;
             }
             else
             {
                 actualSpeed = walkingSpeed;
-                if (isRunPressed)
+                if (player.isRunPressed)
                 {
                     actualSpeed = runningSpeed;
-                    isRunning = true;
+                    player.isRunning = true;
                     anim.SetBool("isRunning", true);
                 }
             }
@@ -166,7 +132,7 @@ public class PlayerMovement : MonoBehaviour
                 desiredMoveDirection *= actualSpeed;
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(desiredMoveDirection), 10f * Time.deltaTime);
 
-                if (!isRunning)
+                if (!player.isRunning)
                 {
                     anim.SetBool("isWalking", true);
                     anim.SetBool("isRunning", false);
@@ -183,12 +149,14 @@ public class PlayerMovement : MonoBehaviour
         currentMovement.z = desiredMoveDirection.z;
     }
 
-    private void handleGravity()
+    public void handleGravity()
     {
-        bool isFalling = !character.isGrounded && currentMovement.y < 0f;
+        character.Move(currentMovement * Time.deltaTime);
+
+        bool isFalling = !isGrounded && currentMovement.y < 0f;
         float fallMultiplier = 2.0f;
 
-        if (character.isGrounded)
+        if (isGrounded)
         {
             anim.SetBool("isFalling", false);
             currentMovement.y = groundedGravity;
@@ -211,15 +179,15 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void handleJump()
+    public void handleJump()
     {
-        if (isJumpPressed && character.isGrounded && !isJumping)
+        if (player.isJumpPressed && isGrounded && !player.isJumping)
         {
             anim.SetBool("isJumping", true);
 
             currentMovement.y = initialJumpVelocity * 0.5f;
         }
-        else if (!isJumpPressed && isJumping && character.isGrounded)
+        else if (!player.isJumpPressed && player.isJumping && isGrounded)
         {
             anim.SetBool("isJumping", false);
         }
@@ -232,15 +200,5 @@ public class PlayerMovement : MonoBehaviour
         }
         // consumes the impact energy each cycle:
         impactDirection = Vector3.Lerp(impactDirection, Vector3.zero, 4 * Time.deltaTime);
-    }
-
-    void onJump(InputAction.CallbackContext context)
-    {
-        isJumpPressed = context.ReadValueAsButton();
-    }
-
-    void onRun(InputAction.CallbackContext context)
-    {
-        isRunPressed = context.ReadValueAsButton();
     }
 }
