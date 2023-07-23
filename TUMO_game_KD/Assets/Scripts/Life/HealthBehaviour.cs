@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealthLife
+public class HealthBehaviour : MonoBehaviour
 {
     //HealthLife variables
     public float maxHealthLife = 1000f;

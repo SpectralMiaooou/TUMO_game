@@ -9,12 +9,12 @@ public class PlayerController : MonoBehaviour
     Transform cam;
     Animator anim;
 
+    //CharacterController variables
+    CharacterController character;
+
     private Vector3 impact = Vector3.zero;
 
-    private bool canTurn180;
-
     //HealthBar variables
-    public HealthLife life;
     public Image healthBar;
 
     //Input variables
@@ -38,23 +38,22 @@ public class PlayerController : MonoBehaviour
     public bool isMoving;
     public bool isRunPressed = false;
 
-    //Gravity variables
-    private float gravity = -9.81f;
-    private float groundedGravity = -0.05f;
-
     //GroundCheck variables
-    private bool isGrounded;
+    public bool isGrounded;
     public Transform groundCheck;
     public LayerMask groundMask;
 
     //Jumping variables
     public bool isJumping = false;
-    private float maxJumpHeight = 3f;
-    private float maxJumpTime = 1f;
-    private float initialJumpVelocity;
     public bool isJumpPressed = false;
+    public bool isFalling;
 
-
+    //Other Behaviours variables
+    public HealthBehaviour health;
+    public AttackBehaviour attack;
+    public PlayerMovement movement;
+    public RotationBehaviour rotation;
+    public JumpBehaviour jump;
 
     private void Awake()
     {
@@ -91,40 +90,88 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         cam = Camera.main.transform;
-        life = new HealthLife();
         anim = GetComponent<Animator>();
+        health = GetComponent<HealthBehaviour>();
+        attack = GetComponent<AttackBehaviour>();
+        movement = GetComponent<PlayerMovement>();
+        rotation = GetComponent<RotationBehaviour>();
+        jump = GetComponent<JumpBehaviour>();
+
+        character = GetComponent<CharacterController>();
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        anim.SetBool("canMove", true);
     }
 
     // Update is called once per frame
     void Update()
     {
         //handleImpact();
+        //ENABLE RUNNING
+        if (isRunPressed)
+        {
+            anim.SetBool("isRunning", true);
+        }
+
+        //ATTACKS
+        if(!isAttacking)
+        {
+            if (isPrimaryAttackPressed)
+            {
+                attack.handleAttack(1);
+            }
+            else if (isSecondaryAttackPressed)
+            {
+                attack.handleAttack(2);
+            }
+            else if (isUltimateAttackPressed)
+            {
+                attack.handleAttack(3);
+            }
+        }
+
+        //ANIMATION
         handleAnimation();
+
+        //ROTATION AND MOVEMENT
+        rotation.handleRotation(move);
+        if(canMove)
+        {
+            movement.handleMovement(move, isRunning);
+        }
+
+        //JUMP AND GRAVITY
+        jump.handleGravity();
+        if(isJumpPressed)
+        {
+            jump.handleJump(isJumping);
+        }
 
         handleHealthBar();
 
-        Debug.Log(isPrimaryAttackPressed);
+        //Debug.Log(isJumpPressed);
     }
 
     void handleAnimation()
     {
+        anim.SetBool("isGrounded", character.isGrounded);
+
         isAttacking = anim.GetBool("isAttacking");
         isMoving = anim.GetBool("isMoving");
         isJumping = anim.GetBool("isJumping");
-        isGrounded = anim.GetBool("isGrounded");
         isWalking = anim.GetBool("isWalking");
         isRunning = anim.GetBool("isRunning");
+        isFalling = anim.GetBool("isFalling");
         canMove = anim.GetBool("canMove");
     }
 
     void handleHealthBar()
     {
-        healthBar.fillAmount = Mathf.Lerp( healthBar.fillAmount, (life.healthLife / life.maxHealthLife), 3f * Time.deltaTime);
+        healthBar.fillAmount = Mathf.Lerp( healthBar.fillAmount, (health.healthLife / health.maxHealthLife), 3f * Time.deltaTime);
 
-        Color healthColor = Color.Lerp(Color.red, Color.green, (life.healthLife / life.maxHealthLife));
+        Color healthColor = Color.Lerp(Color.red, Color.green, (health.healthLife / health.maxHealthLife));
         healthBar.color = healthColor;
     }
     /*

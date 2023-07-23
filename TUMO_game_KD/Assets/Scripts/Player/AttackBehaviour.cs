@@ -2,30 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackAbility : MonoBehaviour
+public class AttackBehaviour : MonoBehaviour
 {
     public Weapon weapon;
-    public int attackType;
     Animator anim;
-    public PlayerController player;
 
-    //Attack variables
-    /*
-    public Weapon weapon;
-    private bool isAttacking;*/
     private Attack currentAttack;
 
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
-        player = GetComponent<PlayerController>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        handleAttack();
     }
 
     public void Attack()
@@ -39,28 +26,25 @@ public class AttackAbility : MonoBehaviour
         h.damage = currentAttack.attackDamage;
     }
 
-    public void handleAttack()
+    public void handleAttack(int type)
     {
-        if(player.isPrimaryAttackPressed)
+        if (type == 1)
         {
             currentAttack = weapon.primaryAttack;
         }
-        else if(player.isSecondaryAttackPressed)
+        else if (type == 2)
         {
             currentAttack = weapon.secondaryAttack;
         }
-        else if(player.isUltimateAttackPressed)
+        else if (type == 3)
         {
             currentAttack = weapon.ultimateAttack;
-        }
-        else
-        {
-            return;
         }
 
         anim.SetBool("isAttacking", true);
         anim.SetBool("canMove", false);
-        anim.Play("Attacks");
+
+        //anim.Play("Attacks");
         anim.Play(currentAttack.attackAnimation);
     }
     public void disableAttack()
@@ -69,4 +53,5 @@ public class AttackAbility : MonoBehaviour
         anim.SetBool("isRunning", false);
         anim.SetBool("canMove", true);
     }
+
 }

@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public TextMeshProUGUI UIHealthBar;
 
-    private HealthLife playerHealthRef;
+    private HealthBehaviour playerHealthRef;
 
     // Start is called before the first frame update
     void Start()

@@ -19,9 +19,9 @@ public abstract class AttackController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<HealthLife>() != null && other.gameObject != user)
+        if (other.GetComponent<HealthBehaviour>() != null && other.gameObject != user)
         {
-            HealthLife health = other.GetComponent<HealthLife>();
+            HealthBehaviour health = other.GetComponent<HealthBehaviour>();
             health.TakeDamage(damage);
             Debug.Log(other.name + ": " + health.healthLife.ToString());
         }
