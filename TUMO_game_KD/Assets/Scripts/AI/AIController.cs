@@ -56,6 +56,22 @@ public class AIController : MonoBehaviour
     private float maxJumpTime = 1f;
     private float initialJumpVelocity;
 
+    //Other Behaviours variables
+    public HealthBehaviour health;
+    public AttackBehaviour attack;
+    public PlayerMovement movement;
+    public RotationBehaviour rotation;
+    public JumpBehaviour jump;
+
+    public enum EnemyStates
+    {
+        IDLE,
+        PATROLLING,
+        CHASE,
+        FLEE
+    }
+    public EnemyStates enemyState = EnemyStates.IDLE;
+
     private void Awake()
     {
         setupJumpVariables();
@@ -74,17 +90,30 @@ public class AIController : MonoBehaviour
         anim = GetComponent<Animator>();
         character = GetComponent<CharacterController>();
 
+        health = GetComponent<HealthBehaviour>();
+        attack = GetComponent<AttackBehaviour>();
+        movement = GetComponent<PlayerMovement>();
+        rotation = GetComponent<RotationBehaviour>();
+        jump = GetComponent<JumpBehaviour>();
+
         disableTargeting();
         
         actualSpeed = walkingSpeed;
 
         agent.updatePosition = false;
         agent.updateRotation = false;
+
+        anim.SetBool("canMove", true);
     }
 
     // Update is called once per frame
     void Update()
     {
+        
+        
+        
+        
+        /*
         //print(character.isGrounded);
         currentMovement.x = 0f;
         currentMovement.z = 0f;
@@ -118,7 +147,7 @@ public class AIController : MonoBehaviour
 
         handleGravity();
         return;
-        //handleJump();
+        //handleJump();*/
     }
 
     void handleAnimation()
