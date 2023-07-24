@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class FieldOfView : MonoBehaviour
+public class VisionBehaviour : MonoBehaviour
 {
     public float radius;
     public float radiusAttack;

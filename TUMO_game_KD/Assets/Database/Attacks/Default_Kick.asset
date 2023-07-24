@@ -18,10 +18,9 @@ MonoBehaviour:
   attackType: 2
   attackCost: 0
   attackDamage: 100
-  height: 2
+  maxRange: 2
   radius: 0.5
   offset: {x: 0, y: 0.9, z: 0}
-  duration: 0.2
   attackManager: {fileID: 6512182568089572397, guid: 60f2616546916854aa5b97cddb377f70,
     type: 3}
   attackDescription: C'est un coup de pied.

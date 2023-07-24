@@ -51,7 +51,7 @@ public class PlayerController : MonoBehaviour
     //Other Behaviours variables
     public HealthBehaviour health;
     public AttackBehaviour attack;
-    public PlayerMovement movement;
+    public MoveBehaviour movement;
     public RotationBehaviour rotation;
     public JumpBehaviour jump;
 
@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         health = GetComponent<HealthBehaviour>();
         attack = GetComponent<AttackBehaviour>();
-        movement = GetComponent<PlayerMovement>();
+        movement = GetComponent<MoveBehaviour>();
         rotation = GetComponent<RotationBehaviour>();
         jump = GetComponent<JumpBehaviour>();
 
@@ -110,13 +110,13 @@ public class PlayerController : MonoBehaviour
     {
         //handleImpact();
         //ENABLE RUNNING
-        if (isRunPressed)
+        if (isRunPressed && isGrounded)
         {
             anim.SetBool("isRunning", true);
         }
 
         //ATTACKS
-        if(!isAttacking)
+        if(!isAttacking && isGrounded)
         {
             if (isPrimaryAttackPressed)
             {
@@ -136,7 +136,10 @@ public class PlayerController : MonoBehaviour
         handleAnimation();
 
         //ROTATION AND MOVEMENT
-        rotation.handleRotation(move);
+        if (!isAttacking)
+        {
+            rotation.handleRotation(move, cam);
+        }
         if(canMove)
         {
             movement.handleMovement(move, isRunning);
@@ -158,6 +161,7 @@ public class PlayerController : MonoBehaviour
     {
         anim.SetBool("isGrounded", character.isGrounded);
 
+        isGrounded = anim.GetBool("isGrounded");
         isAttacking = anim.GetBool("isAttacking");
         isMoving = anim.GetBool("isMoving");
         isJumping = anim.GetBool("isJumping");

@@ -19,8 +19,6 @@ public class AIController : MonoBehaviour
     CharacterController character;
     public Transform player;
 
-    public FieldOfView field;
-
     //Movement variables
     private float actualSpeed;
     public float walkingSpeed = 3f;
@@ -31,6 +29,7 @@ public class AIController : MonoBehaviour
     private bool isWalking;
     private bool isRunning;
     private bool isMoving;
+    private float radiusActionZone;
 
     //Gravity variables
     private float gravity = -9.81f;
@@ -52,6 +51,7 @@ public class AIController : MonoBehaviour
     //Jumping variables
     private bool isJumpPressed = false;
     private bool isJumping = false;
+    private bool isFalling;
     private float maxJumpHeight = 3f;
     private float maxJumpTime = 1f;
     private float initialJumpVelocity;
@@ -59,9 +59,10 @@ public class AIController : MonoBehaviour
     //Other Behaviours variables
     public HealthBehaviour health;
     public AttackBehaviour attack;
-    public PlayerMovement movement;
+    public ChaseBehaviour chase;
     public RotationBehaviour rotation;
     public JumpBehaviour jump;
+    public VisionBehaviour vision;
 
     public enum EnemyStates
     {
@@ -92,14 +93,14 @@ public class AIController : MonoBehaviour
 
         health = GetComponent<HealthBehaviour>();
         attack = GetComponent<AttackBehaviour>();
-        movement = GetComponent<PlayerMovement>();
+        chase = GetComponent<ChaseBehaviour>();
         rotation = GetComponent<RotationBehaviour>();
         jump = GetComponent<JumpBehaviour>();
+        vision = GetComponent<VisionBehaviour>();
 
         disableTargeting();
-        
-        actualSpeed = walkingSpeed;
 
+        actualSpeed = walkingSpeed;
         agent.updatePosition = false;
         agent.updateRotation = false;
 
@@ -109,10 +110,62 @@ public class AIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        radiusActionZone = attack.weapon.maxRange;
+        vision.radiusAttack = radiusActionZone;
+        agent.stoppingDistance = radiusActionZone * 0.70f;
+        //Debug.Log(character.isGrounded);
+
+        Vector2 direction = Vector2.right * agent.desiredVelocity.x + Vector2.up * agent.desiredVelocity.z;
         
-        
-        
-        
+        //ROTATION AND MOVEMENT
+        if (!isAttacking)
+        {
+            if(radiusActionZone >= agent.remainingDistance)
+            {
+                rotation.handleRotation(direction, null);
+            }
+            else
+            {
+                rotation.handleRotation(direction, null);
+            }
+        }
+
+        //ATTACKS
+        if (!isAttacking && isGrounded && vision.isLineOfSight)
+        {
+            if(Random.value <= 0.7f)
+            {
+                agent.enabled = false;
+                attack.handleAttack(1);
+            }
+            else if (Random.value <= 0.3f)
+            {
+                agent.enabled = false;
+                attack.handleAttack(2);
+            }
+            else if (Random.value <= 0.05f)
+            {
+                agent.enabled = false;
+                attack.handleAttack(3);
+            }
+        }
+
+        //ANIMATION
+        handleAnimation();
+
+        //CHASE
+        if (isGrounded && !isAttacking && radiusActionZone < agent.remainingDistance)
+        {
+            chase.handleChase(player.transform);
+        }
+
+        //JUMP AND GRAVITY
+        jump.handleGravity();
+        if (isJumpPressed)
+        {
+            jump.handleJump(isJumping);
+        }
+
         /*
         //print(character.isGrounded);
         currentMovement.x = 0f;
@@ -150,59 +203,22 @@ public class AIController : MonoBehaviour
         //handleJump();*/
     }
 
+
     void handleAnimation()
     {
+        anim.SetBool("isGrounded", character.isGrounded);
+
+        isGrounded = anim.GetBool("isGrounded");
         isAttacking = anim.GetBool("isAttacking");
         isMoving = anim.GetBool("isMoving");
         isJumping = anim.GetBool("isJumping");
-        isGrounded = anim.GetBool("isGrounded");
         isWalking = anim.GetBool("isWalking");
         isRunning = anim.GetBool("isRunning");
+        isFalling = anim.GetBool("isFalling");
+        canMove = anim.GetBool("canMove");
     }
 
-    void handleMovement()
-    {
-        move = Vector3.zero;
 
-        if (canMove)
-        {
-            move = transform.forward * move.y + transform.right * move.x;
-            move.Normalize();
-
-            anim.SetFloat("inputX", move.magnitude, 0.0f, Time.deltaTime * 2f);
-            currentMovement.x = 0f;
-            currentMovement.z = 0f;
-
-
-            if (move.magnitude > 0.1)
-            {
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(move), Time.deltaTime * 10f);
-            }
-
-            move = transform.forward * move.magnitude * actualSpeed;
-        }
-        currentMovement.x = move.x;
-        currentMovement.z = move.z;
-    }
-
-    void handleAttack()
-    {
-        if (IsGrounded() && !isAttacking)
-        {
-            if(isPrimaryAttackPressed)
-            {
-                _attackSetup(weapon.primaryAttack);
-            }
-            if (isSecondaryAttackPressed)
-            {
-                _attackSetup(weapon.secondaryAttack);
-            }
-            if (isUltimateAttackPressed)
-            {
-                _attackSetup(weapon.ultimateAttack);
-            }
-        }
-    }
 
     private void handleGravity()
     {
@@ -244,10 +260,10 @@ public class AIController : MonoBehaviour
         if (type == "attack")
         {
             isPrimaryAttackPressed = false;
-            if (field.canSeePlayer && IsGrounded())
+            if (vision.canSeePlayer && IsGrounded())
             {
                 lastShotChase = Time.time;
-                if (field.isLineOfSight || Vector3.Distance(transform.position, player.position) < field.radiusAttack)
+                if (vision.isLineOfSight || Vector3.Distance(transform.position, player.position) < vision.radiusAttack)
                 {
                     disableTargeting();
                     isPrimaryAttackPressed = true;
@@ -258,7 +274,7 @@ public class AIController : MonoBehaviour
                     enableTargeting(player.position, "run");
                 }
             }
-            else if (!field.canSeePlayer && IsGrounded())
+            else if (!vision.canSeePlayer && IsGrounded())
             {
                 if (Time.time - lastShotChase < cooldownChase)
                 {
@@ -302,33 +318,6 @@ public class AIController : MonoBehaviour
         anim.SetBool("isRunning", false);
         anim.SetBool("isWalking", false);
         anim.SetBool("isMoving", false);
-    }
-    void disableAttack()
-    {
-        anim.SetBool("isAttacking", false);
-        //isAttacking = false;
-        canMove = true;
-        //anim.Play("Walking");
-    }
-
-    private void _attackSetup(Attack attack)
-    {
-        canMove = false;
-        anim.SetBool("isAttacking", true);
-        anim.Play("Attacks");
-        anim.Play(attack.attackAnimation);
-        currentAttack = attack;
-    }
-
-    public void Attack()
-    {
-        GameObject attackObject = currentAttack.attackManager;
-        GameObject _object = Instantiate(attackObject, transform.position + currentAttack.offset, transform.rotation);
-        AttackController h = _object.GetComponent<AttackController>();
-        h.user = gameObject;
-        h.maxRange = currentAttack.maxRange;
-        h.radius = currentAttack.radius;
-        h.damage = currentAttack.attackDamage;
     }
 
     void AddImpact()

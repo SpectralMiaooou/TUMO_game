@@ -4,20 +4,26 @@ using UnityEngine;
 
 public class RotationBehaviour : MonoBehaviour
 {
-    //Camera variables
-    Transform cam;
-
     //Animator variables
     Animator anim;
     private void Start()
     {
-        cam = Camera.main.transform;
         anim = GetComponent<Animator>();
     }
-    public void handleRotation(Vector2 direction)
+    public void handleRotation(Vector2 direction, Transform offset)
     {
-        var forward = cam.transform.forward;
-        var right = cam.transform.right;
+        Vector3 forward;
+        Vector3 right;
+        if (offset == null)
+        {
+            forward = Vector3.forward;
+            right = Vector3.right;
+        }
+        else
+        {
+            forward = offset.transform.forward;
+            right = offset.transform.right;
+        }
 
         forward.y = 0f;
         right.y = 0f;

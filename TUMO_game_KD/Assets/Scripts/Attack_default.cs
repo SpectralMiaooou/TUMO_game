@@ -23,15 +23,15 @@ public class Attack_default : AttackController
         UnityEditor.Handles.matrix = this.transform.localToWorldMatrix;/*
         UnityEditor.Handles.DrawWireCube(new Vector3( 0f, 0f, height/2), new Vector3(radius*2, radius*2, height));*/
 
-        UnityEditor.Handles.DrawWireArc(Vector3.forward * (maxRange - radius), Vector3.up, Vector3.left, 180, radius);
+        UnityEditor.Handles.DrawWireArc(Vector3.forward * (maxRange - radius), Vector3.up, Vector3.left, -180, radius);
         UnityEditor.Handles.DrawLine(new Vector3(-radius, 0f, radius), new Vector3(-radius, 0f, maxRange - radius));
         UnityEditor.Handles.DrawLine(new Vector3(radius, 0f, radius), new Vector3(radius, 0f, maxRange - radius));
-        UnityEditor.Handles.DrawWireArc(Vector3.forward * (maxRange - radius), Vector3.left, Vector3.up, -180, radius);
+        UnityEditor.Handles.DrawWireArc(Vector3.forward * (maxRange - radius), Vector3.left, Vector3.up, 180, radius);
         //draw frontways
-        UnityEditor.Handles.DrawWireArc(Vector3.forward * radius, Vector3.up, Vector3.left, -180, radius);
+        UnityEditor.Handles.DrawWireArc(Vector3.forward * radius, Vector3.up, Vector3.left, 180, radius);
         UnityEditor.Handles.DrawLine(new Vector3(0f, -radius, radius), new Vector3(0f, -radius, maxRange - radius));
         UnityEditor.Handles.DrawLine(new Vector3(0f, radius, radius), new Vector3(0f, radius, maxRange - radius));
-        UnityEditor.Handles.DrawWireArc(Vector3.forward * radius, Vector3.left, Vector3.up, 180, radius);
+        UnityEditor.Handles.DrawWireArc(Vector3.forward * radius, Vector3.left, Vector3.up, -180, radius);
         //draw center
         UnityEditor.Handles.DrawWireDisc(Vector3.forward * radius, Vector3.forward, radius);
         UnityEditor.Handles.DrawWireDisc(Vector3.forward * (maxRange - radius), Vector3.forward, radius);
