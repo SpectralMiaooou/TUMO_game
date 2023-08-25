@@ -120,7 +120,7 @@ public class AIController : MonoBehaviour
         //ROTATION AND MOVEMENT
         if (!isAttacking)
         {
-            if(radiusActionZone >= agent.remainingDistance)
+            if(radiusActionZone >= Vector3.Distance(transform.position, player.position))
             {
                 rotation.handleRotation(direction, null);
             }
@@ -154,7 +154,7 @@ public class AIController : MonoBehaviour
         handleAnimation();
 
         //CHASE
-        if (isGrounded && !isAttacking && radiusActionZone < agent.remainingDistance)
+        if (isGrounded && !isAttacking && radiusActionZone < Vector3.Distance(transform.position, player.position))
         {
             chase.handleChase(player.transform);
         }
