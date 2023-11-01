@@ -7,8 +7,8 @@ public class Weapon : ScriptableObject
 {
     public string weaponID;
     public string weaponName;
-    public List<Attack> primaryAttack;
-    public List<Attack> secondaryAttack;
-    public List<Attack> ultimateAttack;
+    public Attack primaryAttack;
+    public Attack secondaryAttack;
+    public Attack ultimateAttack;
     public float maxRange;
 }
