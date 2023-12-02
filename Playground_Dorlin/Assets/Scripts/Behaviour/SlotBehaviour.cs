@@ -5,12 +5,12 @@ using UnityEngine;
 public class SlotBehaviour : MonoBehaviour
 {
     [SerializeField]
-    private List<Weapon> slot;
+    private WeaponController[] slots = new WeaponController[3];
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -19,8 +19,14 @@ public class SlotBehaviour : MonoBehaviour
         
     }
 
-    public void AddItem()
+    public void AddItem(WeaponController weapon)
     {
-
+        for (int i = 1; i < slots.Length; i++)
+        {
+            if (slots[i] == null)
+            {
+                slots[i] = weapon;
+            }
+        }
     }
 }

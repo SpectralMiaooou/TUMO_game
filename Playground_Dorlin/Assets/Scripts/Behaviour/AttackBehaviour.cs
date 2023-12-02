@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AttackBehaviour : MonoBehaviour
 {
-    public Weapon weapon;
+    public WeaponItem weapon;
     Animator anim;
     //public WeaponBehaviour behaviour;
 

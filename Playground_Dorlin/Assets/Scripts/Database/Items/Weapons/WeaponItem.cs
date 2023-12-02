@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Weapon", menuName = "Asset/Weapon")]
-public class Weapon : ScriptableObject
+[CreateAssetMenu(fileName = "New Weapon Item", menuName = "Asset/Weapon Item")]
+public class WeaponItem : Item
 {
-    public string weaponID;
-    public string weaponName;
+    [Header("Weapon Options")]
+    public GameObject weaponPrefab;
     public Attack primaryAttack;
     public Attack secondaryAttack;
     public Attack ultimateAttack;

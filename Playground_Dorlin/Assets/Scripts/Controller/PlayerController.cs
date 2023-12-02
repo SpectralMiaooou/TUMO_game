@@ -50,6 +50,7 @@ public class PlayerController : MonoBehaviour
     public RotationBehaviour rotation;
     public JumpBehaviour jump;
     public InputHandler controls;
+    public SlotBehaviour slots;
 
     // Start is called before the first frame update
     void Start()
@@ -62,6 +63,7 @@ public class PlayerController : MonoBehaviour
         rotation = GetComponent<RotationBehaviour>();
         jump = GetComponent<JumpBehaviour>();
         controls = GetComponent<InputHandler>();
+        slots = GetComponent<SlotBehaviour>();
 
         character = GetComponent<CharacterController>();
 
@@ -174,4 +176,16 @@ public class PlayerController : MonoBehaviour
             // consumes the impact energy each cycle:
             impactDirection = Vector3.Lerp(impactDirection, Vector3.zero, 4 * Time.deltaTime);
         }*/
+    public void CheckInteractable()
+    {
+        RaycastHit hit;
+        // Shot ray to find object to pick
+        if (Physics.SphereCast(transform.position, 0.3f, transform.forward, out hit, 1f))
+        {
+            if (hit.transform.gameObject.TryGetComponent<IInteractable>(out IInteractable interactable))
+            {
+                interactable.Interact(this);
+            }
+        }
+    }
 }
