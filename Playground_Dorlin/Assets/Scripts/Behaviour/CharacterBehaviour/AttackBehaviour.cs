@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class AttackBehaviour : MonoBehaviour
 {
-    public WeaponItem weapon;
+    public WeaponItem weaponData;
+    public GameObject weapon;
     Animator anim;
     //public WeaponBehaviour behaviour;
 
@@ -23,6 +24,6 @@ public class AttackBehaviour : MonoBehaviour
 
     public void handleAttack(int type)
     {
-        //behaviour.Attack(type);
+        //weapon.
     }
 }

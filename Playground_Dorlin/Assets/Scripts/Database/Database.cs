@@ -32,6 +32,7 @@ public class Database : MonoBehaviour
     {
         return instance.items.allItems[Random.Range(0, instance.items.allItems.Count())];
     }
+    /*
     public static WeaponItem GetWeaponByID(string ID)
     {
         return instance.weapons.allWeapons.FirstOrDefault(instance => instance.weaponID == ID);
@@ -40,5 +41,5 @@ public class Database : MonoBehaviour
     public static WeaponItem GetRandomWeapon(string ID)
     {
         return instance.weapons.allWeapons[Random.Range(0, instance.weapons.allWeapons.Count())];
-    }
+    }*/
 }

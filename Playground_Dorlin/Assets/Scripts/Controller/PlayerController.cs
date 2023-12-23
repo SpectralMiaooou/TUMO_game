@@ -52,6 +52,9 @@ public class PlayerController : MonoBehaviour
     public InputHandler controls;
     public SlotBehaviour slots;
 
+    //Weapon variables
+    public WeaponController weapon;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -89,7 +92,14 @@ public class PlayerController : MonoBehaviour
         {
             if (isPrimaryAttackPressed)
             {
-                attack.handleAttack(1);
+                if(weapon.TryGetComponent<ISwingable>(out ISwingable wp))
+                {
+                    wp.Swing();
+                }
+                else if(weapon.TryGetComponent<IHitscanable>(out IHitscanable wp))
+                {
+                    wp.Shoot();
+                }
             }
             else if (isSecondaryAttackPressed)
             {
@@ -151,7 +161,7 @@ public class PlayerController : MonoBehaviour
         isRunPressed = controls.isRunPressed;
 
         isJumpPressed = controls.isJumpPressed;
-}
+    }
 
     void handleHealthBar()
     {

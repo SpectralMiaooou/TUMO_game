@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponController : MonoBehaviour
+public interface ISwingable
 {
-    public WeaponItem weaponData;
+    void Swing();
 }
