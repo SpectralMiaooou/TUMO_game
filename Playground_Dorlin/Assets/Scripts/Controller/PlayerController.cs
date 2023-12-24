@@ -92,13 +92,17 @@ public class PlayerController : MonoBehaviour
         {
             if (isPrimaryAttackPressed)
             {
-                if(weapon.TryGetComponent<ISwingable>(out ISwingable wp))
+                if (weapon.TryGetComponent<ISwingable>(out ISwingable swingable))
                 {
-                    wp.Swing();
+                    swingable.Swing();
                 }
-                else if(weapon.TryGetComponent<IHitscanable>(out IHitscanable wp))
+                else if (weapon.TryGetComponent<IHitscan>(out IHitscan hitscan))
                 {
-                    wp.Shoot();
+                    hitscan.Shoot();
+                }
+                else if (weapon.TryGetComponent<IProjectile>(out IProjectile projectile))
+                {
+                    projectile.Throw();
                 }
             }
             else if (isSecondaryAttackPressed)

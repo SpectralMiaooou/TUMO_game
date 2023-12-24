@@ -9,6 +9,6 @@ public class Item : ScriptableObject
     public string itemName;
     [TextArea]
     public string itemDescription;
-    public int itemCost;
+    public int itemPrice;
     public Sprite itemSprite;
 }

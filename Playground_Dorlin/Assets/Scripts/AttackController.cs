@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class AttackController : MonoBehaviour
 {
-    public Attack currentAttack;
+    public WeaponItem currentAttack;
     [SerializeField]
     private GameObject prefabHurtbox;
     public CapsuleCollider capsuleCollider;
