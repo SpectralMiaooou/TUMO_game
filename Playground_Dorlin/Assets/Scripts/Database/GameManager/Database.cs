@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.UI;
 using UnityEngine;
 
 public class Database : MonoBehaviour
@@ -8,7 +9,14 @@ public class Database : MonoBehaviour
     public ItemDatabase items;
     public WeaponDatabase weapons;
 
-    private static Database instance;
+    //HealthBar variables
+    public Image healthBar;
+
+    public PlayerController player;
+
+    public Transform trash;
+
+    public static Database instance;
 
     private void Awake()
     {
@@ -22,6 +30,10 @@ public class Database : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    void Update()
+    {
+        handleHealthBar(player.health.healthLife, player.health.maxHealthLife);
+    }
 
     public static Item GetItemByID(string ID)
     {
@@ -31,6 +43,14 @@ public class Database : MonoBehaviour
     public static Item GetRandomItem(string ID)
     {
         return instance.items.allItems[Random.Range(0, instance.items.allItems.Count())];
+    }
+
+    void handleHealthBar(float health, float healthMax)
+    {
+        healthBar.fillAmount = Mathf.Lerp(healthBar.fillAmount, (health / healthMax), 3f * Time.deltaTime);
+
+        Color healthColor = Color.Lerp(Color.red, Color.green, (health / healthMax));
+        healthBar.color = healthColor;
     }
     /*
     public static WeaponItem GetWeaponByID(string ID)

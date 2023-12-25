@@ -8,6 +8,10 @@ public class ProjectileWeaponItem : WeaponItem
     [Header("Projectile Weapon Settings")]
     public float weaponReloadCooldown;
     public float weaponDamage;
+    public float weaponProjectileSpeed;
+    public float weaponProjectileGravity;
+    public float weaponProjectileLifeTime;
+    public GameObject weaponProjectileGO;
     public int weaponCost;
     public AnimatorOverrideController shootAction;
     public AnimatorOverrideController scopeAction;

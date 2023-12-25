@@ -11,4 +11,5 @@ public class Item : ScriptableObject
     public string itemDescription;
     public int itemPrice;
     public Sprite itemSprite;
+    public int itemMaxCapacity = 1;
 }

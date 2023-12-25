@@ -15,6 +15,8 @@ public class InputHandler : MonoBehaviour
     //Jumping variables
     public bool isJumpPressed = false;
 
+    public float scroll;
+
     public Vector2 move;
     // Start is called before the first frame update
     void Start()
@@ -40,6 +42,7 @@ public class InputHandler : MonoBehaviour
         onSecondaryAttack();
         onUltimateAttack();
         onRun();
+        onScroll();
     }
 
     void onMove()
@@ -69,5 +72,10 @@ public class InputHandler : MonoBehaviour
     void onRun()
     {
         isRunPressed = Input.GetKey(KeyCode.Z);
+    }
+
+    void onScroll()
+    {
+        scroll = Input.GetAxis("Mouse ScrollWheel");
     }
 }

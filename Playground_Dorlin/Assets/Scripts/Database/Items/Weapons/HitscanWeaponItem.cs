@@ -8,6 +8,8 @@ public class HitscanWeaponItem : WeaponItem
     [Header("Hitscan Weapon Settings")]
     public float weaponFireRate;
     public float weaponReloadCooldown;
+    public float weaponAmmoCapacity;
+    public bool weaponIsAutomatic;
     public float weaponDamage;
     public float weaponRange;
     public int weaponCost;

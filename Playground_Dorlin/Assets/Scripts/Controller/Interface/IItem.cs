@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IInteractable
+public interface IItem
 {
-    public void Interact(Transform player);
+    public Item GetItem();
 }

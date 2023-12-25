@@ -2,16 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HitscanWeaponController : MonoBehaviour, IHitscan
+public class HitscanWeaponController : WeaponController, IHitscan, IItem
 {
     private Transform target;
-    private HitscanWeaponItem weaponData;
-
+    private HitscanWeaponItem weapon;
+    public Item GetItem()
+    {
+        return (weapon);
+    }
     public void Shoot()
     {
         RaycastHit hit;
-        if (Physics.Raycast(target.position, target.forward, out hit, weaponData.maxRange))
+        if (Physics.Raycast(target.position, target.forward, out hit, weapon.weaponRange))
         {
+            HealthBehaviour life = hit.transform.GetComponent<HealthBehaviour>();
+            if (life != null)
+            {
+                life.TakeDamage(weapon.weaponDamage);
+            }
 
         }
     }

@@ -10,17 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2af33bcdb7be5d2488bb56f8355535fa, type: 3}
-  m_Name: Default
+  m_Name: BoxingGlove
   m_EditorClassIdentifier: 
-  itemID: 000000
-  itemName: Default
+  itemID: 000001
+  itemName: Boxing Glove
   itemDescription: 
   itemPrice: 0
   itemSprite: {fileID: 0}
   itemMaxCapacity: 1
-  weaponPrefab: {fileID: 4364589451262929440, guid: 59e267f4e28341f448eefc1b7eb1281f, type: 3}
-  weaponRange: 0.1
-  weaponRadius: 0.1
-  weaponDamage: 0.1
+  weaponPrefab: {fileID: 1766026845574297272, guid: f627b18cbbae80742992340476fab2a1, type: 3}
+  weaponRange: 1
+  weaponRadius: 0.25
+  weaponDamage: 50
   weaponCost: 0
-  dataAnimations: []
+  dataAnimations:
+  - {fileID: 22100000, guid: 415b98bce30734e1cb7376829c360c8e, type: 2}
+  - {fileID: 22100000, guid: 3b7136f4e96332849a14732827565765, type: 2}
+  - {fileID: 22100000, guid: 9172b73d6e7ab43da8fbea5b1577d34d, type: 2}

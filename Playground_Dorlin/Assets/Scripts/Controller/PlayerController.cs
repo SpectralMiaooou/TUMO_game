@@ -13,9 +13,6 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 impact = Vector3.zero;
 
-    //HealthBar variables
-    public Image healthBar;
-
     //Input variables
     public Vector2 move;
 
@@ -35,6 +32,9 @@ public class PlayerController : MonoBehaviour
     public bool isMoving;
     public bool isRunPressed = false;
 
+    //Scroll Variables
+    public float scroll;
+
     //GroundCheck variables
     public bool isGrounded;
 
@@ -50,10 +50,12 @@ public class PlayerController : MonoBehaviour
     public RotationBehaviour rotation;
     public JumpBehaviour jump;
     public InputHandler controls;
-    public SlotBehaviour slots;
+    public InventoryBehaviour inventory;
 
     //Weapon variables
-    public WeaponController weapon;
+    public WeaponItem weapon;
+
+    public Transform target;
 
     // Start is called before the first frame update
     void Start()
@@ -66,7 +68,7 @@ public class PlayerController : MonoBehaviour
         rotation = GetComponent<RotationBehaviour>();
         jump = GetComponent<JumpBehaviour>();
         controls = GetComponent<InputHandler>();
-        slots = GetComponent<SlotBehaviour>();
+        inventory = GetComponent<InventoryBehaviour>();
 
         character = GetComponent<CharacterController>();
 
@@ -82,6 +84,13 @@ public class PlayerController : MonoBehaviour
         //handleImpact();
         //ENABLE RUNNING
         handleBoolean();
+        CheckInteractable();
+
+        if(!Mathf.Approximately(0f, scroll))
+        {
+            inventory.ChangeSlot(scroll);
+        }
+
         if (isRunPressed && isGrounded)
         {
             anim.SetBool("isRunning", true);
@@ -90,29 +99,7 @@ public class PlayerController : MonoBehaviour
         //ATTACKS
         if(isGrounded)
         {
-            if (isPrimaryAttackPressed)
-            {
-                if (weapon.TryGetComponent<ISwingable>(out ISwingable swingable))
-                {
-                    swingable.Swing();
-                }
-                else if (weapon.TryGetComponent<IHitscan>(out IHitscan hitscan))
-                {
-                    hitscan.Shoot();
-                }
-                else if (weapon.TryGetComponent<IProjectile>(out IProjectile projectile))
-                {
-                    projectile.Throw();
-                }
-            }
-            else if (isSecondaryAttackPressed)
-            {
-                attack.handleAttack(2);
-            }
-            else if (isUltimateAttackPressed)
-            {
-                attack.handleAttack(3);
-            }
+            attack.handleAttack(inventory, controls);
         }
 
         //ANIMATION
@@ -134,9 +121,6 @@ public class PlayerController : MonoBehaviour
         {
             jump.handleJump(isJumping);
         }
-
-        handleHealthBar();
-
         //Debug.Log(isJumpPressed);
     }
 
@@ -152,6 +136,7 @@ public class PlayerController : MonoBehaviour
         isRunning = anim.GetBool("isRunning");
         isFalling = anim.GetBool("isFalling");
         canMove = anim.GetBool("canMove");
+        scroll = controls.scroll;
     }
 
     void handleBoolean()
@@ -165,14 +150,6 @@ public class PlayerController : MonoBehaviour
         isRunPressed = controls.isRunPressed;
 
         isJumpPressed = controls.isJumpPressed;
-    }
-
-    void handleHealthBar()
-    {
-        healthBar.fillAmount = Mathf.Lerp( healthBar.fillAmount, (health.healthLife / health.maxHealthLife), 3f * Time.deltaTime);
-
-        Color healthColor = Color.Lerp(Color.red, Color.green, (health.healthLife / health.maxHealthLife));
-        healthBar.color = healthColor;
     }
     /*
         void AddImpact()
@@ -192,14 +169,20 @@ public class PlayerController : MonoBehaviour
         }*/
     public void CheckInteractable()
     {
-        RaycastHit hit;
-        // Shot ray to find object to pick
-        if (Physics.SphereCast(transform.position, 0.3f, transform.forward, out hit, 1f))
+        Collider[] colliders = Physics.OverlapSphere(transform.position, 1f);
+
+        foreach (Collider collider in colliders)
         {
-            if (hit.transform.gameObject.TryGetComponent<IInteractable>(out IInteractable interactable))
+            //print(collider.transform.name);
+            if (collider.TryGetComponent<IInteractable>(out IInteractable interactable))
             {
-                interactable.Interact(this);
+                interactable.Interact(gameObject.transform);
             }
         }
+    }
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, 1f);
     }
 }

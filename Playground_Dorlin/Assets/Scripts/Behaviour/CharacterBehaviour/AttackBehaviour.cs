@@ -4,17 +4,12 @@ using UnityEngine;
 
 public class AttackBehaviour : MonoBehaviour
 {
-    public WeaponItem weaponData;
-    public GameObject weapon;
     Animator anim;
-    //public WeaponBehaviour behaviour;
 
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
-        //behaviour.weapon = weapon;
-        //behaviour.anim = anim;
     }
 
     void Update()
@@ -22,8 +17,32 @@ public class AttackBehaviour : MonoBehaviour
         //behaviour.LaunchAttack();
     }
 
-    public void handleAttack(int type)
+    public void handleAttack(InventoryBehaviour slot, InputHandler input)
     {
-        //weapon.
+        GameObject weapon = slot.currentWeapon.item;
+        if (input.isPrimaryAttackPressed)
+        {
+            if (weapon.TryGetComponent<ISwingable>(out ISwingable swingable))
+            {
+                swingable?.Swing();
+            }
+            else if (weapon.TryGetComponent<IHitscan>(out IHitscan hitscan))
+            {
+                hitscan?.Shoot();
+            }
+            else if (weapon.TryGetComponent<IProjectile>(out IProjectile projectile))
+            {
+                projectile?.Throw();
+            }
+            anim.SetBool("isAttacking", true);
+        }
+        else if (input.isSecondaryAttackPressed)
+        {
+            //attack.handleAttack(2);
+        }
+        else if (input.isUltimateAttackPressed)
+        {
+            //attack.handleAttack(3);
+        }
     }
 }
