@@ -10,5 +10,5 @@ public class MeleeWeaponItem : WeaponItem
     public float weaponRadius;
     public float weaponDamage;
     public int weaponCost;
-    public List<AnimatorOverrideController> dataAnimations;
+    public List<AnimationSO> weaponPrimaryAnimOV;
 }

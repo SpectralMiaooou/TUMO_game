@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IHitscan
 {
-    void Shoot();
+    void Shoot(UserProfile profile);
 }

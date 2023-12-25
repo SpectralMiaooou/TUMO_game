@@ -9,7 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f7bd2d9f616a48baa689b565e55d6cc, type: 3}
-  m_Name: Database_Attacks
+  m_Script: {fileID: 11500000, guid: 80dd4c51800ff1e4f932a65acc27f4d3, type: 3}
+  m_Name: Punch
   m_EditorClassIdentifier: 
-  allAttacks: []
+  animationID: 000000
+  animationName: Punch
+  animatorOV: {fileID: 22100000, guid: 3b7136f4e96332849a14732827565765, type: 2}
+  animationDescription: This is a punch.

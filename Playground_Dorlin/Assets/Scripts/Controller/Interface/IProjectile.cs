@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IProjectile
 {
-    void Throw();
+    void Throw(UserProfile profile);
 }

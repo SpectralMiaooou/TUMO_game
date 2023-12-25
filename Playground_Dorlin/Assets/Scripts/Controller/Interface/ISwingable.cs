@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ISwingable
 {
-    void Swing();
+    void Swing(UserProfile profile);
 }

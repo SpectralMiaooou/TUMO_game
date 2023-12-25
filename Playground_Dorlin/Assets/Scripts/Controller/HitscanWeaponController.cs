@@ -10,7 +10,7 @@ public class HitscanWeaponController : WeaponController, IHitscan, IItem
     {
         return (weapon);
     }
-    public void Shoot()
+    public void Shoot(UserProfile profile)
     {
         RaycastHit hit;
         if (Physics.Raycast(target.position, target.forward, out hit, weapon.weaponRange))

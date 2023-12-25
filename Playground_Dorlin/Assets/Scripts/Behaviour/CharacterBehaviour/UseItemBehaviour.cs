@@ -2,14 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackBehaviour : MonoBehaviour
+public class UseItemBehaviour : MonoBehaviour
 {
     Animator anim;
 
+    //Profile Variables
+    public UserProfile profile = new UserProfile();
+    
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
+
+        profile.username = transform.tag;
+        profile.user = gameObject;
+        profile.anim = anim;
     }
 
     void Update()
@@ -17,24 +24,22 @@ public class AttackBehaviour : MonoBehaviour
         //behaviour.LaunchAttack();
     }
 
-    public void handleAttack(InventoryBehaviour slot, InputHandler input)
+    public void UseItem(GameObject weapon, InputHandler input)
     {
-        GameObject weapon = slot.currentWeapon.item;
         if (input.isPrimaryAttackPressed)
         {
             if (weapon.TryGetComponent<ISwingable>(out ISwingable swingable))
             {
-                swingable?.Swing();
+                swingable?.Swing(profile);
             }
             else if (weapon.TryGetComponent<IHitscan>(out IHitscan hitscan))
             {
-                hitscan?.Shoot();
+                hitscan?.Shoot(profile);
             }
             else if (weapon.TryGetComponent<IProjectile>(out IProjectile projectile))
             {
-                projectile?.Throw();
+                projectile?.Throw(profile);
             }
-            anim.SetBool("isAttacking", true);
         }
         else if (input.isSecondaryAttackPressed)
         {

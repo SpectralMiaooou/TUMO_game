@@ -11,7 +11,7 @@ public class ProjectileWeaponController : WeaponController, IProjectile, IItem
     {
         return (weapon);
     }
-    public void Throw()
+    public void Throw(UserProfile profile)
     {
         GameObject projectile = Instantiate(weapon.weaponProjectileGO, target.position, target.rotation);
         Rigidbody rb = projectile.GetComponent<Rigidbody>();

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Item : ScriptableObject
 {
-    [Header("Item Base Options")]
+    [Header("Item Base Settings")]
     public string itemID;
     public string itemName;
     [TextArea]

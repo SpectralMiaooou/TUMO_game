@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
 
     //Other Behaviours variables
     public HealthBehaviour health;
-    public AttackBehaviour attack;
+    public UseItemBehaviour use;
     public MoveBehaviour movement;
     public RotationBehaviour rotation;
     public JumpBehaviour jump;
@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviour
         cam = Camera.main.transform;
         anim = GetComponent<Animator>();
         health = GetComponent<HealthBehaviour>();
-        attack = GetComponent<AttackBehaviour>();
+        use = GetComponent<UseItemBehaviour>();
         movement = GetComponent<MoveBehaviour>();
         rotation = GetComponent<RotationBehaviour>();
         jump = GetComponent<JumpBehaviour>();
@@ -96,10 +96,10 @@ public class PlayerController : MonoBehaviour
             anim.SetBool("isRunning", true);
         }
 
-        //ATTACKS
+        //USE
         if(isGrounded)
         {
-            attack.handleAttack(inventory, controls);
+            use.UseItem(inventory.currentWeapon.item, controls);
         }
 
         //ANIMATION
