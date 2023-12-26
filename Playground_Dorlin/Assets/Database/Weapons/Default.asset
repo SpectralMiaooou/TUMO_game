@@ -24,9 +24,6 @@ MonoBehaviour:
   weaponDamage: 0.1
   weaponCost: 0
   weaponPrimaryAnimOV:
-  - {fileID: 11400000, guid: bcf4a051d83c62b45bc15d2825881f00, type: 2}
-  - {fileID: 11400000, guid: 888b9377402bc5e40b96aab720c004ad, type: 2}
-  - {fileID: 11400000, guid: bcf4a051d83c62b45bc15d2825881f00, type: 2}
   - {fileID: 11400000, guid: 888b9377402bc5e40b96aab720c004ad, type: 2}
   - {fileID: 11400000, guid: bcf4a051d83c62b45bc15d2825881f00, type: 2}
   - {fileID: 11400000, guid: 888b9377402bc5e40b96aab720c004ad, type: 2}

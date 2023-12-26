@@ -30,7 +30,7 @@ public class MeleeWeaponController : WeaponController, ISwingable, IItem
 
     public void Swing(UserProfile profile)
     {
-        if (Time.time - lastComboEnd >= comboCooldown && comboCounter < weapon.weaponPrimaryAnimOV.Count)
+        if (Time.time - lastComboEnd >= comboCooldown && comboCounter < weapon.weaponPrimaryAnimOV.Length)
         {
             CancelInvoke("EndCombo");
 
@@ -54,7 +54,7 @@ public class MeleeWeaponController : WeaponController, ISwingable, IItem
                 lastClickedTime = Time.time;
                 comboCounter++;
 
-                if (comboCounter >= weapon.weaponPrimaryAnimOV.Count)
+                if (comboCounter >= weapon.weaponPrimaryAnimOV.Length)
                 {
                     comboCounter = 0;
                 }
@@ -67,7 +67,7 @@ public class MeleeWeaponController : WeaponController, ISwingable, IItem
     {
         if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f && anim.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
         {
-            Invoke("EndCombo", 1f);
+            anim.SetBool("canCombo", false);
         }
     }
 
