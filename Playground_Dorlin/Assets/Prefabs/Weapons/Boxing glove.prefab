@@ -97,7 +97,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4201cc0d675547fd92cba66bd1edd43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 11400000, guid: ca896f1b07e81e14ba12f2cb0c32d60e, type: 2}
+  weapon: {fileID: 11400000, guid: 34b45fafd32ce3546be8c8f02c19f0e8, type: 2}
+  lastComboEnd: 0
+  comboCounter: 0
+  canCombo: 0
 --- !u!65 &1752795256964646769
 BoxCollider:
   m_ObjectHideFlags: 0

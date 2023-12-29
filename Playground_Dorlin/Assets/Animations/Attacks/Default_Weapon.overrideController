@@ -6,8 +6,12 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: punch
+  m_Name: Default_Weapon
   m_Controller: {fileID: 9100000, guid: efbb32e96f2fd42fbac934803bc62d6e, type: 2}
   m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: bd656a512b085ff4794d319c62a9948d, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: bd656a512b085ff4794d319c62a9948d, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: e504b6f3d7084d14482ab1236bffface, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: e504b6f3d7084d14482ab1236bffface, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 10ac976d598e9d94eae94a3de947f60c, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: 10ac976d598e9d94eae94a3de947f60c, type: 2}

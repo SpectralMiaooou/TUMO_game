@@ -23,7 +23,4 @@ MonoBehaviour:
   weaponRadius: 0.1
   weaponDamage: 0.1
   weaponCost: 0
-  weaponPrimaryAnimOV:
-  - {fileID: 11400000, guid: 888b9377402bc5e40b96aab720c004ad, type: 2}
-  - {fileID: 11400000, guid: bcf4a051d83c62b45bc15d2825881f00, type: 2}
-  - {fileID: 11400000, guid: 888b9377402bc5e40b96aab720c004ad, type: 2}
+  weaponPrimaryAnimOV: {fileID: 22100000, guid: 0747b9a394c8f52439fa483b9c1afab3, type: 2}

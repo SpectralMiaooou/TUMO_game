@@ -17,6 +17,8 @@ public class InputHandler : MonoBehaviour
 
     public float scroll;
 
+    public Vector2 mouseInput;
+
     public Vector2 move;
     // Start is called before the first frame update
     void Start()
@@ -43,6 +45,7 @@ public class InputHandler : MonoBehaviour
         onUltimateAttack();
         onRun();
         onScroll();
+        onMouse();
     }
 
     void onMove()
@@ -77,5 +80,10 @@ public class InputHandler : MonoBehaviour
     void onScroll()
     {
         scroll = Input.GetAxis("Mouse ScrollWheel");
+    }
+
+    void onMouse()
+    {
+        mouseInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
     }
 }

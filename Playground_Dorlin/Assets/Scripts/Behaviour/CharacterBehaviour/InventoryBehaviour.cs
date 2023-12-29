@@ -36,7 +36,7 @@ public class InventoryBehaviour : MonoBehaviour
         {
             currentIndexWeapon = 0;
         }
-        print(currentIndexWeapon);
+        //print(currentIndexWeapon);
         currentWeapon = inventory[currentIndexWeapon];
 
         SwitchItem(lastIndexWeapon, currentIndexWeapon);

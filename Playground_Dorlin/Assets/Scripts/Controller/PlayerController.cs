@@ -72,8 +72,9 @@ public class PlayerController : MonoBehaviour
 
         character = GetComponent<CharacterController>();
 
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.visible = false;
+        CameraController.instance.player = this;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         anim.SetBool("canMove", true);
     }
@@ -122,6 +123,11 @@ public class PlayerController : MonoBehaviour
             jump.handleJump(isJumping);
         }
         //Debug.Log(isJumpPressed);
+    }
+
+    public void LateUpdate()
+    {
+        CameraController.instance.HandleAllCameraActions();
     }
 
     void handleAnimation()

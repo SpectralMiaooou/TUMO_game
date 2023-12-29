@@ -44,4 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4201cc0d675547fd92cba66bd1edd43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 11400000, guid: 8ae4cb84891e58946b9f57ba4eafb7ac, type: 2}
+  weapon: {fileID: 11400000, guid: 9a06166ae5091f343bca34e622470c90, type: 2}
+  lastComboEnd: 0
+  comboCounter: 0
+  canCombo: 0
