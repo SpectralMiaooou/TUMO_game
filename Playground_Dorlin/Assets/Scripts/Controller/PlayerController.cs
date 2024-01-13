@@ -57,6 +57,14 @@ public class PlayerController : MonoBehaviour
 
     public Transform target;
 
+    [Header("Item Attach Body Parts")]
+    public Transform rightHandPlacement;
+    public Transform leftHandPlacement;
+    public Transform rightFootPlacement;
+    public Transform leftFootPlacement;
+    public Transform torsoPlacement;
+    public Transform headPlacement;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -100,7 +108,9 @@ public class PlayerController : MonoBehaviour
         //USE
         if(isGrounded)
         {
-            use.UseItem(inventory.currentWeapon.item, controls);
+            Debug.Log(inventory.currentItem);
+            Debug.Log(inventory.currentItem.item);
+            use.UseItem(inventory.currentItem.item, controls);
         }
 
         //ANIMATION

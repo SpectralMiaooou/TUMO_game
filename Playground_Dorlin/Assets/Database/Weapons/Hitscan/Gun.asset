@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0feade15eeaf2bd43b4c5185b79796a2, type: 3}
+  m_Name: Gun
+  m_EditorClassIdentifier: 
+  itemID: 000002
+  itemName: Gun
+  itemDescription: This is a gun.
+  itemPrice: 0
+  itemSprite: {fileID: 0}
+  itemMaxCapacity: 1
+  weaponPrefab: {fileID: 3276474148856476137, guid: 21bdc26af9672472db50769b216f1ede, type: 3}
+  weaponFireRate: 2
+  weaponReloadCooldown: 1
+  weaponAmmoCapacity: 30
+  weaponIsAutomatic: 1
+  weaponDamage: 10
+  weaponRange: 25
+  weaponCost: 1
+  shootAction: {fileID: 0}
+  scopeAction: {fileID: 0}
+  reloadAction: {fileID: 0}

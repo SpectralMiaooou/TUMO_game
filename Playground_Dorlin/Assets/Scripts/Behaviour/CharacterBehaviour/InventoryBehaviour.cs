@@ -5,8 +5,8 @@ using UnityEngine;
 public class InventoryBehaviour : MonoBehaviour
 {
     public InventorySlot[] inventory = new InventorySlot[3];
-    public InventorySlot currentWeapon;
-    public int currentIndexWeapon;
+    public InventorySlot currentItem;
+    public int currentIndexItem;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,8 +14,8 @@ public class InventoryBehaviour : MonoBehaviour
         {
             createDefaultSlot(slot);
         }
-        currentIndexWeapon = 0;
-        currentWeapon = inventory[0];
+        currentIndexItem = 0;
+        currentItem = inventory[0];
     }
 
     // Update is called once per frame
@@ -26,20 +26,20 @@ public class InventoryBehaviour : MonoBehaviour
 
     public void ChangeSlot(float scroll)
     {
-        int lastIndexWeapon = currentIndexWeapon;
-        currentIndexWeapon = currentIndexWeapon + (int)(scroll*10);
-        if (currentIndexWeapon < 0)
+        int lastIndexWeapon = currentIndexItem;
+        currentIndexItem = currentIndexItem + (int)(scroll*10);
+        if (currentIndexItem < 0)
         {
-            currentIndexWeapon = inventory.Length - 1;
+            currentIndexItem = inventory.Length - 1;
         }
-        else if (currentIndexWeapon >= inventory.Length)
+        else if (currentIndexItem >= inventory.Length)
         {
-            currentIndexWeapon = 0;
+            currentIndexItem = 0;
         }
-        //print(currentIndexWeapon);
-        currentWeapon = inventory[currentIndexWeapon];
+        //print(currentIndexItem);
+        currentItem = inventory[currentIndexItem];
 
-        SwitchItem(lastIndexWeapon, currentIndexWeapon);
+        SwitchItem(lastIndexWeapon, currentIndexItem);
     }
 
     public void SearchEmptySlot(GameObject item, Item data, int quantity)
@@ -76,6 +76,14 @@ public class InventoryBehaviour : MonoBehaviour
             inventory[slot].item = item;
             inventory[slot].data = data;
             inventory[slot].quantity += quantity;
+            if(currentIndexItem == slot)
+            {
+                EnableItem(slot);
+            }
+            else
+            {
+                DisableItem(slot);
+            }
         }
         else
         {

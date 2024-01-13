@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class HitscanWeaponController : WeaponController, IHitscan, IItem
 {
-    private Transform target;
-    private Transform handle;
-    private HitscanWeaponItem weapon;
+    public Transform target;
+    public Transform handle;
+    public HitscanWeaponItem weapon;
+
+    private PlayerController user;
     private float lastTimeShot;
 
     public Item GetItem()
@@ -14,10 +17,22 @@ public class HitscanWeaponController : WeaponController, IHitscan, IItem
         return (weapon);
     }
 
+    void OnEnable()
+    {
+        user.GetComponent<Rig>().weight = 1f;
+    }
+    void OnDisable()
+    {
+        user.GetComponent<Rig>().weight = 0f;
+    }
+
     public void Shoot(UserProfile profile)
     {
         if (Time.time - lastTimeShot > 1/weapon.weaponFireRate)
         {
+            lastTimeShot = Time.time;
+            profile.anim.SetBool("isAttacking", true);
+            profile.anim.Play("Attack_Shoot");
             RaycastHit hit;
             if (Physics.Raycast(target.position, target.forward, out hit, weapon.weaponRange))
             {
