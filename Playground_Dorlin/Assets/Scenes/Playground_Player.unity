@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -425,6 +425,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
@@ -751,7 +752,7 @@ Transform:
   m_Children:
   - {fileID: 2037534436}
   m_Father: {fileID: 543450652124233696}
-  m_RootOrder: -1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &861368785
 MonoBehaviour:
@@ -937,7 +938,6 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
-  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -1146,7 +1146,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 861368784}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2037534437
 MonoBehaviour:
@@ -1193,7 +1193,6 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 117905656136433166, guid: 8c174ae13b0d8884992dca6908420d47, type: 3}
@@ -1253,7 +1252,6 @@ PrefabInstance:
       value: PlayerCamera (Left & Right)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c174ae13b0d8884992dca6908420d47, type: 3}
 --- !u!1 &152878828307716685
 GameObject:
@@ -1543,7 +1541,7 @@ MonoBehaviour:
   leftHandPlacement: {fileID: 0}
   rightFootPlacement: {fileID: 0}
   leftFootPlacement: {fileID: 0}
-  backPlacement: {fileID: 0}
+  torsoPlacement: {fileID: 0}
   headPlacement: {fileID: 0}
 --- !u!4 &1031632035449816509
 Transform:
@@ -2297,7 +2295,6 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
     m_TransformParent: {fileID: 1430273982}
     m_Modifications:
     - target: {fileID: 3276474148856476136, guid: 21bdc26af9672472db50769b216f1ede, type: 3}
@@ -2349,7 +2346,6 @@ PrefabInstance:
       value: gun
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 21bdc26af9672472db50769b216f1ede, type: 3}
 --- !u!1 &3365675183793094029
 GameObject:
@@ -3004,7 +3000,7 @@ SkinnedMeshRenderer:
   m_DirtyAABB: 0
 --- !u!95 &5866666020465042842
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -3021,7 +3017,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!114 &5866666020465042843
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4010,7 +4006,6 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    serializedVersion: 2
     m_TransformParent: {fileID: 74376645}
     m_Modifications:
     - target: {fileID: 9088877524419706156, guid: 13f889d8ee509c94aa1e20ac20d61dc6, type: 3}
@@ -4063,7 +4058,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
-    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 13f889d8ee509c94aa1e20ac20d61dc6, type: 3}
 --- !u!4 &9118793900831801095
 Transform:
