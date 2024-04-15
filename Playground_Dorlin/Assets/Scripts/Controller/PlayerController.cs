@@ -45,12 +45,13 @@ public class PlayerController : MonoBehaviour
 
     //Other Behaviours variables
     public HealthBehaviour health;
+    public GravityBehaviour gravity;
     public UseItemBehaviour use;
     public MoveBehaviour movement;
     public RotationBehaviour rotation;
     public JumpBehaviour jump;
     public InputHandler controls;
-    public InventoryBehaviour inventory;
+    public InventoryBase inventory;
 
     //Weapon variables
     public WeaponItem weapon;
@@ -74,9 +75,11 @@ public class PlayerController : MonoBehaviour
         use = GetComponent<UseItemBehaviour>();
         movement = GetComponent<MoveBehaviour>();
         rotation = GetComponent<RotationBehaviour>();
+        gravity = GetComponent<GravityBehaviour>();
         jump = GetComponent<JumpBehaviour>();
         controls = GetComponent<InputHandler>();
-        inventory = GetComponent<InventoryBehaviour>();
+
+        inventory = new InventoryBase(3);
 
         character = GetComponent<CharacterController>();
 
@@ -108,8 +111,6 @@ public class PlayerController : MonoBehaviour
         //USE
         if(isGrounded)
         {
-            Debug.Log(inventory.currentItem);
-            Debug.Log(inventory.currentItem.item);
             use.UseItem(inventory.currentItem.item, controls);
         }
 
@@ -127,7 +128,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //JUMP AND GRAVITY
-        jump.handleGravity();
+        gravity.handleGravity();
         if(isJumpPressed && canMove)
         {
             jump.handleJump(isJumping);
